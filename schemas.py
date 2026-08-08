@@ -53,3 +53,30 @@ class AssessmentResponse(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class BadgeResponse(BaseModel):
+    id: str
+    user_id: str
+    assessment_id: str
+    competency: str
+    achievement_level: str
+    issuer: str
+    description: str
+    image_url: str
+    issue_date: datetime
+    blockchain_tx: str | None = None
+
+    model_config = {"from_attributes": True}
+
+
+class OpenBadgeAssertion20(BaseModel):
+    context: str = Field("https://w3id.org/openbadges/v2", alias="@context")
+    type: str = "Assertion"
+    id: str
+    recipient: dict
+    issuedOn: str
+    badge: dict
+    verification: dict
+
+    model_config = {"populate_by_name": True}
