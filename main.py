@@ -1,4 +1,6 @@
+import os
 from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from auth import (
@@ -22,6 +24,9 @@ from schemas import (
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="User Management API", version="1.0.0")
+
+os.makedirs(os.path.join("static", "badges"), exist_ok=True)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
