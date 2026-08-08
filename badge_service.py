@@ -1,4 +1,8 @@
 import os
+import uuid
+from typing import Optional
+from sqlalchemy.orm import Session
+from models import Badge, Assessment, User
 
 def generate_badge_svg(badge_id: str, competency: str, mastery_level: str, recipient_name: str) -> str:
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
@@ -18,3 +22,45 @@ def save_badge_image(badge_id: str, svg_content: str) -> str:
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(svg_content)
     return f"/static/badges/{badge_id}.svg"
+
+def issue_badge_if_eligible(db: Session, assessment: Assessment, user: User) -> Optional[Badge]:
+    # 1. Eligibility Check: Case-insensitive check for Level 2 or Level 3
+    level_normalized = str(assessment.mastery_level).strip().title()
+    if level_normalized not in ["Level 2", "Level 3"]:
+        return None
+
+    # 2. Prevent duplicate badge generation for the same assessment
+    existing_badge = db.query(Badge).filter(Badge.assessment_id == assessment.id).first()
+    if existing_badge:
+        return existing_badge
+
+    # 3. Generate unique UUID and image path
+    badge_id = str(uuid.uuid4())
+    recipient_display_name = user.email.split("@")[0]  # Fallback display name
+
+    svg_content = generate_badge_svg(
+        badge_id=badge_id,
+        competency=assessment.competency,
+        mastery_level=assessment.mastery_level,
+        recipient_name=recipient_display_name
+    )
+    
+    image_url = save_badge_image(badge_id, svg_content)
+
+    # 4. Create and save Badge DB record
+    new_badge = Badge(
+        id=badge_id,
+        user_id=user.id,
+        assessment_id=assessment.id,
+        competency=assessment.competency,
+        achievement_level=assessment.mastery_level,
+        issuer="ARSII / Skill Badge Platform",
+        description=f"Demonstrated {assessment.mastery_level} competency in {assessment.competency}.",
+        image_url=image_url
+    )
+
+    db.add(new_badge)
+    db.commit()
+    db.refresh(new_badge)
+
+    return new_badge
