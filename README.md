@@ -193,7 +193,7 @@ Puis va sur GitHub → tu verras une bannière "Compare & pull request" → cliq
 | Gestion des utilisateurs | ✅ Terminé | Heeba |
 | Évaluation IA des compétences | ✅ Fonctionnel, tests de sécurité en cours | Heeba |
 | Gestion des badges | ✅ Terminé | Wassim |
-| Intégration blockchain | ✅ Terminé | Lead Engineer |
+| Intégration blockchain | ✅ Terminé | Wassim |
 | Interface web | 🔜 À venir | — |
 
 *(à mettre à jour au fur et à mesure)*
