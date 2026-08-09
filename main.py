@@ -1,9 +1,15 @@
 import os
+import json
+import hashlib
+from datetime import datetime
+
+import models
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
+from blockchain_service import anchor_badge_on_chain, verify_badge_on_chain
 from auth import (
     create_access_token,
     get_current_user,
@@ -31,6 +37,42 @@ app = FastAPI(title="User Management API", version="1.0.0")
 
 os.makedirs(os.path.join("static", "badges"), exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+def build_badge_assertion(badge: models.Badge, user: models.User, request: Request) -> dict:
+    base_url = str(request.base_url).rstrip('/').replace("localhost", "127.0.0.1")
+
+    # Standardize date string to YYYY-MM-DDTHH:MM:SSZ (stripping microseconds)
+    if isinstance(badge.issue_date, datetime):
+        date_str = badge.issue_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+    else:
+        raw_str = str(badge.issue_date).replace(" ", "T").split(".")[0]
+        date_str = f"{raw_str}Z" if not raw_str.endswith("Z") else raw_str
+
+    return {
+        "@context": "https://w3id.org/openbadges/v2",
+        "type": "Assertion",
+        "id": f"{base_url}/badges/{badge.id}",
+        "recipient": {
+            "type": "email",
+            "hashed": False,
+            "identity": user.email
+        },
+        "issuedOn": date_str,
+        "badge": {
+            "name": badge.competency,
+            "description": badge.description,
+            "image": f"{base_url}{badge.image_url}",
+            "criteria": f"{base_url}/badges/{badge.id}",
+            "issuer": {
+                "name": badge.issuer,
+                "url": f"{base_url}/"
+            }
+        },
+        "verification": {
+            "type": "hosted"
+        }
+    }
 
 
 @app.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
@@ -116,29 +158,11 @@ def get_badge(badge_id: str, request: Request, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Badge not found",
         )
-    
-    return OpenBadgeAssertion20(
-        id=str(request.url),
-        recipient={
-            "type": "email",
-            "hashed": False,
-            "identity": badge.user.email,
-        },
-        issuedOn=badge.issue_date.isoformat(),
-        badge={
-            "name": badge.competency,
-            "description": badge.description,
-            "image": f"{str(request.base_url).rstrip('/')}{badge.image_url}",
-            "criteria": f"{str(request.base_url).rstrip('/')}/badges/{badge.id}",
-            "issuer": {
-                "name": badge.issuer,
-                "url": str(request.base_url),
-            },
-        },
-        verification={
-            "type": "hosted",
-        },
-    )
+    user = db.query(User).filter(User.id == badge.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Associated user not found")
+        
+    return build_badge_assertion(badge, user, request)
 
 
 @app.get("/badges/{badge_id}/image")
@@ -157,3 +181,59 @@ def get_badge_image(badge_id: str, db: Session = Depends(get_db)):
             detail="Image not found",
         )
     return FileResponse(file_path, media_type="image/svg+xml")
+
+
+@app.post("/badges/{badge_id}/anchor")
+def anchor_badge(
+    badge_id: str,
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    badge = db.query(models.Badge).filter(models.Badge.id == badge_id).first()
+    if not badge:
+        raise HTTPException(status_code=404, detail="Badge not found")
+
+    user = db.query(models.User).filter(models.User.id == badge.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Associated user not found")
+
+    assertion = build_badge_assertion(badge, user, request)
+    print("\n[DEBUG ANCHOR PAYLOAD]:", json.dumps(assertion, sort_keys=True))
+
+    try:
+        tx_hash = anchor_badge_on_chain(badge.id, assertion)
+        badge.blockchain_tx = tx_hash
+        db.commit()
+        db.refresh(badge)
+        return {
+            "message": "Badge successfully anchored on blockchain",
+            "badge_id": badge.id,
+            "blockchain_tx": tx_hash
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Blockchain transaction failed: {str(e)}")
+
+
+@app.get("/badges/{badge_id}/verify-on-chain")
+def verify_badge_on_chain_endpoint(
+    badge_id: str,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    badge = db.query(models.Badge).filter(models.Badge.id == badge_id).first()
+    if not badge:
+        raise HTTPException(status_code=404, detail="Badge not found")
+
+    user = db.query(models.User).filter(models.User.id == badge.user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Associated user not found")
+
+    assertion = build_badge_assertion(badge, user, request)
+    print("\n[DEBUG VERIFY PAYLOAD]:", json.dumps(assertion, sort_keys=True))
+    
+    try:
+        verification_result = verify_badge_on_chain(badge.id, assertion)
+        return verification_result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"On-chain verification failed: {str(e)}")
