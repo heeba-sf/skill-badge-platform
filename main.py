@@ -2,6 +2,8 @@ import os
 import json
 import hashlib
 from datetime import datetime
+from pathlib import Path
+import re
 
 import models
 from fastapi import Depends, FastAPI, HTTPException, Request, status
@@ -15,11 +17,12 @@ from auth import (
     get_current_user,
     hash_password,
     verify_password,
+    require_role,
 )
 from badge_service import issue_badge_if_eligible
 from database import Base, engine, get_db
 from grader import grade_submission
-from models import Assessment, Badge, User, UserRole as ModelUserRole
+from models import Assessment, Badge, User, UserRole as ModelUserRole, InstructorDomain, SuggestedActivity
 from schemas import (
     AssessmentResponse,
     BadgeResponse,
@@ -29,6 +32,10 @@ from schemas import (
     UserLogin,
     UserRegister,
     UserResponse,
+    SuggestedActivityRequest,
+    SuggestedActivityResponse,
+    StudentReportResponse,
+    UserReportResponse,
 )
 
 Base.metadata.create_all(bind=engine)
@@ -92,6 +99,17 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
+    
+    # Create instructor domains if registering as instructor with domains
+    if payload.role.value == "instructor" and payload.domains:
+        for domain in payload.domains:
+            instructor_domain = InstructorDomain(
+                instructor_id=user.id,
+                competency=domain
+            )
+            db.add(instructor_domain)
+        db.commit()
+    
     return user
 
 
@@ -114,6 +132,202 @@ def me(current_user: User = Depends(get_current_user)):
     return current_user
 
 
+@app.get("/competencies")
+def get_competencies():
+    """
+    Parse rubric.md and return a list of competency names.
+    Extracts headers in the format "# Competency: X"
+    """
+    rubric_path = Path(__file__).resolve().parent / "rubric.md"
+    if not rubric_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Rubric file not found",
+        )
+    
+    rubric_content = rubric_path.read_text(encoding="utf-8")
+    competency_pattern = r"# Competency:\s*(.+)"
+    competencies = re.findall(competency_pattern, rubric_content)
+    
+    return competencies
+
+
+@app.get("/me/report", response_model=UserReportResponse)
+def get_my_report(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Returns the current user's full history: all their assessments and badges.
+    """
+    assessments = db.query(Assessment).filter(Assessment.user_id == current_user.id).all()
+    badges = db.query(Badge).filter(Badge.user_id == current_user.id).all()
+    
+    return UserReportResponse(
+        assessments=assessments,
+        badges=badges
+    )
+
+
+@app.get("/instructor/domains")
+def get_instructor_domains(
+    current_user: User = Depends(require_role("instructor")),
+    db: Session = Depends(get_db),
+):
+    """
+    Returns the current instructor's list of taught domains.
+    """
+    domains = db.query(InstructorDomain).filter(InstructorDomain.instructor_id == current_user.id).all()
+    return [domain.competency for domain in domains]
+
+
+@app.get("/instructor/students", response_model=list[StudentReportResponse])
+def get_instructor_students(
+    current_user: User = Depends(require_role("instructor")),
+    db: Session = Depends(get_db),
+):
+    """
+    Returns students who have at least one assessment matching one of the instructor's domains.
+    Response includes student_id, email, and which of the instructor's domains this student has activity in.
+    """
+    # Get instructor's domains
+    instructor_domains = db.query(InstructorDomain).filter(InstructorDomain.instructor_id == current_user.id).all()
+    domain_names = [domain.competency for domain in instructor_domains]
+    
+    if not domain_names:
+        return []
+    
+    # Find students with assessments in these domains
+    students_with_activity = db.query(User).join(Assessment).filter(
+        User.role == ModelUserRole.student,
+        Assessment.competency.in_(domain_names)
+    ).distinct().all()
+    
+    result = []
+    for student in students_with_activity:
+        # Get which domains this student has activity in
+        student_assessments = db.query(Assessment).filter(
+            Assessment.user_id == student.id,
+            Assessment.competency.in_(domain_names)
+        ).all()
+        student_domains = list(set([assessment.competency for assessment in student_assessments]))
+        
+        result.append(StudentReportResponse(
+            student_id=student.id,
+            email=student.email,
+            competencies=student_domains
+        ))
+    
+    return result
+
+
+@app.get("/instructor/students/{student_id}/report", response_model=UserReportResponse)
+def get_student_report(
+    student_id: str,
+    current_user: User = Depends(require_role("instructor")),
+    db: Session = Depends(get_db),
+):
+    """
+    Returns that student's assessments and badges, FILTERED to only competencies within the instructor's declared domains.
+    Returns 403 if the student has no activity in any of the instructor's domains.
+    """
+    # Get instructor's domains
+    instructor_domains = db.query(InstructorDomain).filter(InstructorDomain.instructor_id == current_user.id).all()
+    domain_names = [domain.competency for domain in instructor_domains]
+    
+    if not domain_names:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Instructor has no assigned domains"
+        )
+    
+    # Check if student has activity in instructor's domains
+    student_assessments = db.query(Assessment).filter(
+        Assessment.user_id == student_id,
+        Assessment.competency.in_(domain_names)
+    ).all()
+    
+    if not student_assessments:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Student has no activity in your assigned domains"
+        )
+    
+    # Get student's badges in instructor's domains
+    student_badges = db.query(Badge).filter(
+        Badge.user_id == student_id,
+        Badge.competency.in_(domain_names)
+    ).all()
+    
+    return UserReportResponse(
+        assessments=student_assessments,
+        badges=student_badges
+    )
+
+
+@app.post("/instructor/students/{student_id}/suggest-activity", response_model=SuggestedActivityResponse, status_code=status.HTTP_201_CREATED)
+def suggest_activity(
+    student_id: str,
+    payload: SuggestedActivityRequest,
+    current_user: User = Depends(require_role("instructor")),
+    db: Session = Depends(get_db),
+):
+    """
+    Creates a suggested activity for a student.
+    Verifies the competency is one of the instructor's declared domains (400 error if not).
+    """
+    # Verify the competency is in instructor's domains
+    instructor_domain = db.query(InstructorDomain).filter(
+        InstructorDomain.instructor_id == current_user.id,
+        InstructorDomain.competency == payload.competency
+    ).first()
+    
+    if not instructor_domain:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"You are not authorized to suggest activities for competency: {payload.competency}"
+        )
+    
+    # Verify student exists
+    student = db.query(User).filter(User.id == student_id).first()
+    if not student:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Student not found"
+        )
+    
+    # Create suggested activity
+    suggested_activity = SuggestedActivity(
+        instructor_id=current_user.id,
+        student_id=student_id,
+        competency=payload.competency,
+        activity_type=payload.activity_type.value,
+        message=payload.message
+    )
+    db.add(suggested_activity)
+    db.commit()
+    db.refresh(suggested_activity)
+    
+    return suggested_activity
+
+
+@app.get("/instructor/students/{student_id}/suggestions", response_model=list[SuggestedActivityResponse])
+def get_student_suggestions(
+    student_id: str,
+    current_user: User = Depends(require_role("instructor")),
+    db: Session = Depends(get_db),
+):
+    """
+    Returns all suggestions the current instructor has sent to this student.
+    """
+    suggestions = db.query(SuggestedActivity).filter(
+        SuggestedActivity.instructor_id == current_user.id,
+        SuggestedActivity.student_id == student_id
+    ).all()
+    
+    return suggestions
+
+
 @app.post("/submit", response_model=AssessmentResponse, status_code=status.HTTP_201_CREATED)
 def submit(
     payload: SubmissionRequest,
@@ -125,6 +339,7 @@ def submit(
     assessment = Assessment(
         user_id=current_user.id,
         submission_text=payload.submission_text,
+        submission_type=payload.submission_type.value,
         competency=result["competency"],
         mastery_level=result["mastery_level"],
         confidence=result["confidence"],
