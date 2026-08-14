@@ -13,6 +13,16 @@ class UserRole(str, enum.Enum):
     instructor = "instructor"
 
 
+class SubmissionType(str, enum.Enum):
+    assignment = "assignment"
+    project = "project"
+
+
+class ActivityType(str, enum.Enum):
+    assignment = "assignment"
+    project = "project"
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -30,6 +40,7 @@ class User(Base):
 
     assessments: Mapped[list["Assessment"]] = relationship(back_populates="user")
     badges: Mapped[list["Badge"]] = relationship(back_populates="user")
+    instructor_domains: Mapped[list["InstructorDomain"]] = relationship(back_populates="instructor")
 
 
 class Assessment(Base):
@@ -42,6 +53,7 @@ class Assessment(Base):
         String(36), ForeignKey("users.id"), nullable=False, index=True
     )
     submission_text: Mapped[str] = mapped_column(Text, nullable=False)
+    submission_type: Mapped[SubmissionType] = mapped_column(Enum(SubmissionType), nullable=False)
     competency: Mapped[str] = mapped_column(String(255), nullable=False)
     mastery_level: Mapped[str] = mapped_column(String(50), nullable=False)
     confidence: Mapped[float] = mapped_column(Float, nullable=False)
@@ -84,3 +96,42 @@ class Badge(Base):
 
     user: Mapped["User"] = relationship(back_populates="badges")
     assessment: Mapped["Assessment"] = relationship(back_populates="badge")
+
+
+class InstructorDomain(Base):
+    __tablename__ = "instructor_domains"
+
+    id: Mapped[str] = mapped_column(
+        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
+    )
+    instructor_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("users.id"), nullable=False, index=True
+    )
+    competency: Mapped[str] = mapped_column(String(255), nullable=False)
+
+    instructor: Mapped["User"] = relationship(back_populates="instructor_domains")
+
+
+class SuggestedActivity(Base):
+    __tablename__ = "suggested_activities"
+
+    id: Mapped[str] = mapped_column(
+        String(36), primary_key=True, default=lambda: str(uuid.uuid4())
+    )
+    instructor_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("users.id"), nullable=False, index=True
+    )
+    student_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("users.id"), nullable=False, index=True
+    )
+    competency: Mapped[str] = mapped_column(String(255), nullable=False)
+    activity_type: Mapped[ActivityType] = mapped_column(Enum(ActivityType), nullable=False)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(timezone.utc),
+    )
+
+    instructor: Mapped["User"] = relationship(foreign_keys=[instructor_id])
+    student: Mapped["User"] = relationship(foreign_keys=[student_id])

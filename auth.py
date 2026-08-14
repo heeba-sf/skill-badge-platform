@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timedelta, timezone
+from typing import Callable
 
 from dotenv import load_dotenv
 from fastapi import Depends, HTTPException, status
@@ -63,3 +64,27 @@ def get_current_user(
     if user is None:
         raise credentials_exception
     return user
+
+
+def require_role(required_role: str):
+    """
+    Dependency factory that creates a role-checking dependency.
+    Ensures the authenticated user has the specified role.
+    """
+    def role_checker(current_user: User = Depends(get_current_user)) -> User:
+        if current_user.role.value != required_role:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"This action requires '{required_role}' role",
+            )
+        return current_user
+    return role_checker
+
+
+__all__ = [
+    "hash_password",
+    "verify_password",
+    "create_access_token",
+    "get_current_user",
+    "require_role",
+]
