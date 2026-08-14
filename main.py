@@ -7,6 +7,7 @@ import re
 
 import models
 from fastapi import Depends, FastAPI, HTTPException, Request, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
@@ -41,6 +42,14 @@ from schemas import (
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="User Management API", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 os.makedirs(os.path.join("static", "badges"), exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -124,7 +133,7 @@ def login(payload: UserLogin, db: Session = Depends(get_db)):
         )
 
     token = create_access_token(user_id=user.id, role=user.role.value)
-    return TokenResponse(access_token=token)
+    return TokenResponse(access_token=token, role=user.role.value)
 
 
 @app.get("/me", response_model=UserResponse)
@@ -334,13 +343,13 @@ def submit(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    result = grade_submission(payload.submission_text)
+    result = grade_submission(payload.code)
 
     assessment = Assessment(
         user_id=current_user.id,
-        submission_text=payload.submission_text,
-        submission_type=payload.submission_type.value,
-        competency=result["competency"],
+        submission_text=payload.code,
+        submission_type=payload.submission_type,
+        competency=payload.competency,
         mastery_level=result["mastery_level"],
         confidence=result["confidence"],
         feedback=result["feedback"],

@@ -50,11 +50,13 @@ class UserResponse(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    role: str = ""
 
 
 class SubmissionRequest(BaseModel):
-    submission_text: str = Field(..., min_length=1)
-    submission_type: SubmissionType
+    competency: str
+    submission_type: str
+    code: str
 
 
 class AssessmentResponse(BaseModel):
