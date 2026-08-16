@@ -101,6 +101,7 @@ def register(payload: UserRegister, db: Session = Depends(get_db)):
         )
 
     user = User(
+        fullname=payload.fullname,
         email=payload.email,
         password_hash=hash_password(payload.password),
         role=ModelUserRole(payload.role.value),
@@ -178,6 +179,43 @@ def get_my_report(
     )
 
 
+@app.get("/me/suggestions", response_model=list[SuggestedActivityResponse])
+def get_my_suggestions(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Returns all suggestions for the current user (student).
+    For each suggestion, includes whether it has been answered and the result.
+    """
+    suggestions = db.query(SuggestedActivity).filter(
+        SuggestedActivity.student_id == current_user.id
+    ).all()
+    
+    result = []
+    for suggestion in suggestions:
+        # Check if this suggestion has been answered
+        response_assessment = db.query(Assessment).filter(
+            Assessment.suggestion_id == suggestion.id
+        ).first()
+        
+        suggestion_data = {
+            "id": suggestion.id,
+            "instructor_id": suggestion.instructor_id,
+            "student_id": suggestion.student_id,
+            "competency": suggestion.competency,
+            "activity_type": suggestion.activity_type.value,
+            "message": suggestion.message,
+            "created_at": suggestion.created_at,
+            "response_assessment_id": response_assessment.id if response_assessment else None,
+            "response_mastery_level": response_assessment.mastery_level if response_assessment else None,
+            "response_submission_text": response_assessment.submission_text[:200] + "..." if response_assessment and len(response_assessment.submission_text) > 200 else (response_assessment.submission_text if response_assessment else None)
+        }
+        result.append(suggestion_data)
+    
+    return result
+
+
 @app.get("/instructor/domains")
 def get_instructor_domains(
     current_user: User = Depends(require_role("instructor")),
@@ -223,6 +261,7 @@ def get_instructor_students(
         
         result.append(StudentReportResponse(
             student_id=student.id,
+            fullname=student.fullname,
             email=student.email,
             competencies=student_domains
         ))
@@ -328,13 +367,35 @@ def get_student_suggestions(
 ):
     """
     Returns all suggestions the current instructor has sent to this student.
+    For each suggestion, includes whether it has been answered and the result.
     """
     suggestions = db.query(SuggestedActivity).filter(
         SuggestedActivity.instructor_id == current_user.id,
         SuggestedActivity.student_id == student_id
     ).all()
     
-    return suggestions
+    result = []
+    for suggestion in suggestions:
+        # Check if this suggestion has been answered
+        response_assessment = db.query(Assessment).filter(
+            Assessment.suggestion_id == suggestion.id
+        ).first()
+        
+        suggestion_data = {
+            "id": suggestion.id,
+            "instructor_id": suggestion.instructor_id,
+            "student_id": suggestion.student_id,
+            "competency": suggestion.competency,
+            "activity_type": suggestion.activity_type.value,
+            "message": suggestion.message,
+            "created_at": suggestion.created_at,
+            "response_assessment_id": response_assessment.id if response_assessment else None,
+            "response_mastery_level": response_assessment.mastery_level if response_assessment else None,
+            "response_submission_text": response_assessment.submission_text[:200] + "..." if response_assessment and len(response_assessment.submission_text) > 200 else (response_assessment.submission_text if response_assessment else None)
+        }
+        result.append(suggestion_data)
+    
+    return result
 
 
 @app.post("/submit", response_model=AssessmentResponse, status_code=status.HTTP_201_CREATED)
@@ -343,16 +404,29 @@ def submit(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    result = grade_submission(payload.code)
+    # If suggestion_id is provided, verify it belongs to the current user
+    if payload.suggestion_id:
+        suggestion = db.query(SuggestedActivity).filter(
+            SuggestedActivity.id == payload.suggestion_id,
+            SuggestedActivity.student_id == current_user.id
+        ).first()
+        if not suggestion:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="This suggestion does not belong to you"
+            )
+
+    result = grade_submission(payload.submission_text)
 
     assessment = Assessment(
         user_id=current_user.id,
-        submission_text=payload.code,
-        submission_type=payload.submission_type,
-        competency=payload.competency,
+        submission_text=payload.submission_text,
+        submission_type=payload.submission_type.value,
+        competency=result["competency"],
         mastery_level=result["mastery_level"],
         confidence=result["confidence"],
         feedback=result["feedback"],
+        suggestion_id=payload.suggestion_id
     )
     db.add(assessment)
     db.commit()

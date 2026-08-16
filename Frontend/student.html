@@ -188,26 +188,7 @@
       resize: vertical;
     }
 
-    /* Alerts */
-    .alert {
-      padding: 0.85rem 1.15rem;
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      margin-bottom: 1.25rem;
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .alert-error {
-      background-color: var(--danger-light);
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-    .alert-success {
-      background-color: var(--success-light);
-      color: #065f46;
-      border: 1px solid #a7f3d0;
-    }
+
 
     /* Badge & Tags */
     .badge-pill {
@@ -290,90 +271,6 @@
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     }
 
-    /* ========================================== */
-    /* AUTH / MODAL DESIGN                        */
-    /* ========================================== */
-    .auth-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2.5rem 1.5rem;
-      background: radial-gradient(circle at top, rgba(79, 70, 229, 0.06) 0%, transparent 70%);
-    }
-    .auth-card {
-      width: 100%;
-      max-width: 480px;
-      border-radius: var(--radius-xl);
-      padding: 2.25rem;
-      box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border-color);
-      background: var(--bg-surface);
-    }
-    .auth-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    .auth-icon-badge {
-      width: 52px;
-      height: 52px;
-      margin: 0 auto 1rem auto;
-      border-radius: var(--radius-md);
-      background: var(--primary-light);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-    }
-
-    /* Multi-step Role Selection Grid */
-    .role-selection-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin: 1.25rem 0;
-    }
-    .role-card {
-      border: 2px solid var(--border-color);
-      padding: 1.25rem 1rem;
-      text-align: center;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: var(--transition);
-      background-color: var(--bg-surface);
-    }
-    .role-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-    .role-card.selected {
-      border-color: var(--primary);
-      background-color: var(--primary-light);
-      box-shadow: 0 0 0 1px var(--primary);
-    }
-    .role-card-icon {
-      font-size: 1.75rem;
-      margin-bottom: 0.5rem;
-    }
-    .domain-checkboxes {
-      max-height: 160px;
-      overflow-y: auto;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 0.85rem;
-      margin-bottom: 0.85rem;
-      background: #fafafa;
-    }
-    .checkbox-item {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.875rem;
-      cursor: pointer;
-    }
-
     /* Badge Showcase Presentation */
     .badge-card {
       display: flex;
@@ -408,113 +305,9 @@
 <body>
 
   <!-- ========================================== -->
-  <!-- 1. AUTHENTICATION & LOGIN/SIGNUP MODULE    -->
+  <!-- STUDENT DASHBOARD MAIN APPLICATION          -->
   <!-- ========================================== -->
-  <div id="auth-section" class="auth-wrapper">
-    <div class="card auth-card">
-      <div id="auth-alert" class="alert alert-error"></div>
-
-      <!-- Welcome View -->
-      <div id="auth-choice-view">
-        <div class="auth-header">
-          <div class="auth-icon-badge">🎓</div>
-          <h2>Skill Badge Platform</h2>
-          <p style="margin-top: 0.35rem;">Évaluation de compétences et certification Open Badges 2.0</p>
-        </div>
-        <button id="btn-show-login" class="btn btn-primary btn-block" style="margin-bottom: 0.85rem;">Se connecter</button>
-        <button id="btn-show-register" class="btn btn-secondary btn-block">Créer un compte</button>
-      </div>
-
-      <!-- Login View -->
-      <div id="auth-login-view" class="hidden">
-        <div class="auth-header" style="margin-bottom: 1.5rem;">
-          <h2>Connexion</h2>
-          <p style="margin-top: 0.25rem;">Accédez à votre espace étudiant</p>
-        </div>
-
-        <form id="form-login">
-          <div class="form-group">
-            <label for="login-email">Adresse Email</label>
-            <input type="email" id="login-email" class="form-control" required placeholder="nom@etudiant.tn" autocomplete="username" />
-          </div>
-          <div class="form-group">
-            <label for="login-password">Mot de passe</label>
-            <input type="password" id="login-password" class="form-control" required placeholder="••••••••" autocomplete="current-password" />
-          </div>
-          <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block">Se connecter</button>
-        </form>
-        <div style="text-align: center; margin-top: 1.5rem;">
-          <button id="btn-back-to-choice-from-login" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">← Retour</button>
-        </div>
-      </div>
-
-      <!-- Multi-step Registration View -->
-      <div id="auth-register-view" class="hidden">
-        <div class="auth-header" style="margin-bottom: 1.25rem;">
-          <h2>Inscription</h2>
-          <p id="register-step-subtitle" style="margin-top: 0.25rem;">Étape 1 : Choisissez votre rôle</p>
-        </div>
-
-        <!-- Step 1: Role Selection -->
-        <div id="register-step-1">
-          <div class="role-selection-grid">
-            <div class="role-card selected" id="role-choice-student">
-              <div class="role-card-icon">👨‍🎓</div>
-              <h4>Étudiant</h4>
-              <p style="font-size: 0.75rem; margin-top: 0.25rem;">Évaluations & Badges</p>
-            </div>
-            <div class="role-card" id="role-choice-instructor">
-              <div class="role-card-icon">👨‍🏫</div>
-              <h4>Instructeur</h4>
-              <p style="font-size: 0.75rem; margin-top: 0.25rem;">Supervision & Domaines</p>
-            </div>
-          </div>
-          <button id="btn-reg-to-step-2" class="btn btn-primary btn-block">Continuer</button>
-        </div>
-
-        <!-- Step 2: Credentials & Domains -->
-        <div id="register-step-2" class="hidden">
-          <div class="form-group">
-            <label for="reg-email">Email</label>
-            <input type="email" id="reg-email" class="form-control" required placeholder="nom@domaine.tn" autocomplete="email" />
-          </div>
-          <div class="form-group">
-            <label for="reg-password">Mot de passe</label>
-            <input type="password" id="reg-password" class="form-control" required placeholder="••••••••" autocomplete="new-password" />
-          </div>
-          <div class="form-group">
-            <label for="reg-password-confirm">Confirmer le mot de passe</label>
-            <input type="password" id="reg-password-confirm" class="form-control" required placeholder="••••••••" autocomplete="new-password" />
-          </div>
-
-          <!-- Step 3 (Optional - Instructor Only): Domains -->
-          <div id="instructor-domains-container" class="hidden">
-            <label style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; display: block;">Domaines d'enseignement :</label>
-            <div id="reg-domains-list" class="domain-checkboxes">
-              <p style="font-size: 0.85rem; color: var(--text-muted);">Chargement des compétences...</p>
-            </div>
-            <div class="form-group">
-              <input type="text" id="reg-custom-domain" class="form-control" placeholder="+ Domaine libre (séparés par des virgules)" />
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 0.5rem;">
-            <button id="btn-reg-back-to-1" class="btn btn-secondary" style="flex: 1;">Retour</button>
-            <button id="btn-submit-registration" class="btn btn-primary" style="flex: 2;">Valider</button>
-          </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 1.5rem;">
-          <button id="btn-back-to-choice-from-reg" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">← Annuler</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- 2. STUDENT DASHBOARD MAIN APPLICATION      -->
-  <!-- ========================================== -->
-  <div id="app-section" class="hidden">
+  <div id="app-section">
     <!-- Navbar -->
     <header class="navbar">
       <div class="container navbar-inner">
@@ -524,6 +317,7 @@
         <div style="display: flex; align-items: center; gap: 1rem;">
           <div class="nav-tabs">
             <button id="tab-btn-dashboard" class="nav-tab-btn active">Évaluations</button>
+            <button id="tab-btn-suggestions" class="nav-tab-btn">Suggestions reçues</button>
             <button id="tab-btn-report" class="nav-tab-btn">Mon Rapport</button>
           </div>
           <button id="btn-logout" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;">Déconnexion</button>
@@ -539,23 +333,16 @@
           
           <!-- Competencies Selector Card -->
           <div class="card">
-            <h3 style="margin-bottom: 0.35rem;">Compétences Disponibles</h3>
-            <p style="margin-bottom: 1.25rem;">Choisissez une compétence pour lancer une soumission :</p>
-            <div id="competencies-list-container" class="grid" style="gap: 0.75rem;">
-              <p>Chargement des compétences...</p>
-            </div>
+            <h3 style="margin-bottom: 0.35rem;">Informations</h3>
+            <p style="margin-bottom: 1.25rem;">L'IA analysera votre soumission pour déterminer automatiquement la compétence évaluée.</p>
           </div>
 
           <!-- Submission Card -->
           <div class="card">
             <h3 style="margin-bottom: 0.35rem;" id="submission-card-title">Soumission d'Activité</h3>
-            <p style="margin-bottom: 1.25rem;">Sélectionnez une compétence dans la liste pour commencer.</p>
+            <p style="margin-bottom: 1.25rem;">Soumettez votre travail pour évaluation par l'IA.</p>
             
             <form id="form-submission">
-              <div class="form-group">
-                <label for="sub-competency">Compétence Active</label>
-                <input type="text" id="sub-competency" class="form-control" readonly placeholder="Aucune compétence sélectionnée" />
-              </div>
               <div class="form-group">
                 <label for="sub-type">Type d'activité</label>
                 <select id="sub-type" class="form-control" required>
@@ -567,7 +354,7 @@
                 <label for="sub-text">Code ou Travail Réalisé</label>
                 <textarea id="sub-text" class="form-control" required placeholder="Collez votre code source, script ou réponse détaillée ici..."></textarea>
               </div>
-              <button type="submit" id="btn-submit-eval" class="btn btn-primary btn-block" disabled>Soumettre pour Évaluation</button>
+              <button type="submit" id="btn-submit-eval" class="btn btn-primary btn-block">Soumettre pour Évaluation</button>
             </form>
           </div>
         </div>
@@ -593,6 +380,21 @@
           <!-- Earned Badge Card -->
           <div class="card badge-card" id="badge-display-card">
             <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW C: Suggestions Received -->
+      <section id="view-suggestions" class="hidden">
+        <div class="card" style="margin-bottom: 2rem;">
+          <h2 style="margin-bottom: 0.35rem;">Suggestions reçues de vos instructeurs</h2>
+          <p>Répondez aux suggestions d'activités personnalisées de vos instructeurs.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 1rem;">Suggestions</h3>
+          <div id="suggestions-list-container" class="grid" style="gap: 1rem;">
+            <p>Chargement des suggestions...</p>
           </div>
         </div>
       </section>
@@ -633,311 +435,114 @@
     /* ===== APPLICATION STATE ===== */
     const BASE_URL = "http://127.0.0.1:8000";
     let authToken = null;
-    let selectedRole = "student";
     let availableCompetencies = [];
 
-    /* ===== DOM ELEMENTS ===== */
-    const authSection = document.getElementById("auth-section");
-    const appSection = document.getElementById("app-section");
-    const authAlert = document.getElementById("auth-alert");
+    /* ===== SESSION STORAGE CHECK ===== */
+    function checkAuthentication() {
+      authToken = sessionStorage.getItem('access_token');
+      const userRole = sessionStorage.getItem('role');
 
-    const authChoiceView = document.getElementById("auth-choice-view");
-    const authLoginView = document.getElementById("auth-login-view");
-    const authRegisterView = document.getElementById("auth-register-view");
+      if (!authToken || userRole !== 'student') {
+        // Redirect to index if not authenticated or wrong role
+        window.location.href = 'index.html';
+        return false;
+      }
+      return true;
+    }
+
+    /* ===== DOM ELEMENTS ===== */
+    const appSection = document.getElementById("app-section");
     const viewDashboard = document.getElementById("view-dashboard");
+    const viewSuggestions = document.getElementById("view-suggestions");
     const viewReport = document.getElementById("view-report");
 
-    const regStep1 = document.getElementById("register-step-1");
-    const regStep2 = document.getElementById("register-step-2");
-    const roleChoiceStudent = document.getElementById("role-choice-student");
-    const roleChoiceInstructor = document.getElementById("role-choice-instructor");
-    const instructorDomainsContainer = document.getElementById("instructor-domains-container");
-    const regDomainsList = document.getElementById("reg-domains-list");
-
     const tabBtnDashboard = document.getElementById("tab-btn-dashboard");
+    const tabBtnSuggestions = document.getElementById("tab-btn-suggestions");
     const tabBtnReport = document.getElementById("tab-btn-report");
     const btnLogout = document.getElementById("btn-logout");
 
-    const subCompetencyInput = document.getElementById("sub-competency");
     const subTypeSelect = document.getElementById("sub-type");
     const subTextInput = document.getElementById("sub-text");
     const btnSubmitEval = document.getElementById("btn-submit-eval");
     const evalResultContainer = document.getElementById("evaluation-result-container");
 
-    /* ===== UTILITY & ALERT HELPERS ===== */
-    function showAlert(message, isSuccess = false) {
-      authAlert.textContent = message;
-      authAlert.className = isSuccess ? "alert alert-success" : "alert alert-error";
-      authAlert.style.display = "flex";
-    }
-
-    function clearAlert() {
-      authAlert.textContent = "";
-      authAlert.style.display = "none";
-    }
-
-    /* ===== AUTH / LOGIN / REGISTER LOGIC ===== */
-    document.getElementById("btn-show-login").addEventListener("click", () => {
-      clearAlert();
-      authChoiceView.classList.add("hidden");
-      authLoginView.classList.remove("hidden");
-    });
-
-    document.getElementById("btn-show-register").addEventListener("click", () => {
-      clearAlert();
-      authChoiceView.classList.add("hidden");
-      authRegisterView.classList.remove("hidden");
-      loadCompetenciesForRegistration();
-    });
-
-    document.getElementById("btn-back-to-choice-from-login").addEventListener("click", () => {
-      clearAlert();
-      authLoginView.classList.add("hidden");
-      authChoiceView.classList.remove("hidden");
-    });
-
-    document.getElementById("btn-back-to-choice-from-reg").addEventListener("click", () => {
-      clearAlert();
-      authRegisterView.classList.add("hidden");
-      authChoiceView.classList.remove("hidden");
-    });
-
-    roleChoiceStudent.addEventListener("click", () => {
-      selectedRole = "student";
-      roleChoiceStudent.classList.add("selected");
-      roleChoiceInstructor.classList.remove("selected");
-    });
-
-    roleChoiceInstructor.addEventListener("click", () => {
-      selectedRole = "instructor";
-      roleChoiceInstructor.classList.add("selected");
-      roleChoiceStudent.classList.remove("selected");
-    });
-
-    document.getElementById("btn-reg-to-step-2").addEventListener("click", () => {
-      regStep1.classList.add("hidden");
-      regStep2.classList.remove("hidden");
-      document.getElementById("register-step-subtitle").textContent = 
-        `Étape 2 : Identifiants (${selectedRole === "instructor" ? "Instructeur" : "Étudiant"})`;
-
-      if (selectedRole === "instructor") {
-        instructorDomainsContainer.classList.remove("hidden");
-      } else {
-        instructorDomainsContainer.classList.add("hidden");
-      }
-    });
-
-    document.getElementById("btn-reg-back-to-1").addEventListener("click", () => {
-      regStep2.classList.add("hidden");
-      regStep1.classList.remove("hidden");
-      document.getElementById("register-step-subtitle").textContent = "Étape 1 : Choisissez votre rôle";
-    });
-
-    async function loadCompetenciesForRegistration() {
-      try {
-        const res = await fetch(`${BASE_URL}/competencies`);
-        if (res.ok) {
-          const comps = await res.json();
-          availableCompetencies = Array.isArray(comps) ? comps : (comps.competencies || []);
-          regDomainsList.innerHTML = availableCompetencies.map(c => `
-            <label class="checkbox-item">
-              <input type="checkbox" name="domains" value="${c}" />
-              <span>${c}</span>
-            </label>
-          `).join("");
-        }
-      } catch (err) {
-        regDomainsList.innerHTML = `<p style="color: var(--danger); font-size: 0.8rem;">Erreur lors du chargement des compétences.</p>`;
-      }
-    }
-
-    /* Login Handler (Direct POST /login with JSON) */
-    document.getElementById("form-login").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      clearAlert();
-      const email = document.getElementById("login-email").value.trim();
-      const password = document.getElementById("login-password").value;
-
-      const submitBtn = document.getElementById("login-submit-btn");
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Connexion en cours...";
-
-      try {
-        const res = await fetch(`${BASE_URL}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, password: password })
-        });
-
-        if (!res.ok) {
-          if (res.status === 401) {
-            throw new Error("Email ou mot de passe incorrect.");
-          }
-          const errorData = await res.json().catch(() => ({}));
-          throw new Error(errorData.detail || `Erreur serveur (${res.status})`);
-        }
-
-        const data = await res.json();
-        authToken = data.access_token;
+    /* ===== INITIALIZATION ===== */
+    document.addEventListener('DOMContentLoaded', () => {
+      if (checkAuthentication()) {
+        appSection.classList.remove("hidden");
         initAppDashboard();
-      } catch (err) {
-        if (err instanceof TypeError && (err.message.includes("fetch") || err.message.includes("NetworkError"))) {
-          showAlert("Impossible de contacter le serveur. Vérifiez que l'API est démarrée.");
-        } else {
-          showAlert(err.message);
-        }
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Se connecter";
       }
     });
 
-    /* Registration Handler */
-    document.getElementById("btn-submit-registration").addEventListener("click", async () => {
-      clearAlert();
-      const email = document.getElementById("reg-email").value.trim();
-      const password = document.getElementById("reg-password").value;
-      const confirmPassword = document.getElementById("reg-password-confirm").value;
-
-      if (!email || !password) {
-        showAlert("Veuillez renseigner tous les champs obligatoires.");
-        return;
-      }
-      if (password !== confirmPassword) {
-        showAlert("Les mots de passe ne correspondent pas.");
-        return;
-      }
-
-      let domains = [];
-      if (selectedRole === "instructor") {
-        const checked = Array.from(document.querySelectorAll('input[name="domains"]:checked')).map(cb => cb.value);
-        const custom = document.getElementById("reg-custom-domain").value.split(",").map(s => s.trim()).filter(Boolean);
-        domains = [...new Set([...checked, ...custom])];
-      }
-
-      try {
-        const res = await fetch(`${BASE_URL}/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-            role: selectedRole,
-            domains: domains
-          })
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.detail || "Échec de l'inscription.");
-        }
-
-        showAlert("Compte créé avec succès ! Veuillez vous connecter.", true);
-        authRegisterView.classList.add("hidden");
-        authLoginView.classList.remove("hidden");
-        document.getElementById("login-email").value = email;
-        document.getElementById("login-password").focus();
-      } catch (err) {
-        showAlert(err.message);
-      }
-    });
-
+    /* ===== LOGOUT HANDLER ===== */
     btnLogout.addEventListener("click", () => {
-      authToken = null;
-      appSection.classList.add("hidden");
-      authSection.classList.remove("hidden");
-      authLoginView.classList.remove("hidden");
-      authChoiceView.classList.add("hidden");
-      authRegisterView.classList.add("hidden");
+      sessionStorage.clear();
+      window.location.href = 'index.html';
     });
 
     /* ===== STUDENT DASHBOARD & SUBMISSIONS ===== */
     function initAppDashboard() {
-      authSection.classList.add("hidden");
-      appSection.classList.remove("hidden");
-      loadStudentCompetencies();
+      // Enable submit button by default since we now use the AI to determine competency
+      btnSubmitEval.disabled = false;
     }
 
     tabBtnDashboard.addEventListener("click", () => {
       tabBtnDashboard.classList.add("active");
+      tabBtnSuggestions.classList.remove("active");
       tabBtnReport.classList.remove("active");
       viewDashboard.classList.remove("hidden");
+      viewSuggestions.classList.add("hidden");
       viewReport.classList.add("hidden");
+    });
+
+    tabBtnSuggestions.addEventListener("click", () => {
+      tabBtnSuggestions.classList.add("active");
+      tabBtnDashboard.classList.remove("active");
+      tabBtnReport.classList.remove("active");
+      viewSuggestions.classList.remove("hidden");
+      viewDashboard.classList.add("hidden");
+      viewReport.classList.add("hidden");
+      loadStudentSuggestions();
     });
 
     tabBtnReport.addEventListener("click", () => {
       tabBtnReport.classList.add("active");
       tabBtnDashboard.classList.remove("active");
+      tabBtnSuggestions.classList.remove("active");
       viewReport.classList.remove("hidden");
       viewDashboard.classList.add("hidden");
+      viewSuggestions.classList.add("hidden");
       loadStudentReport();
     });
 
-    async function loadStudentCompetencies() {
-      const container = document.getElementById("competencies-list-container");
-      try {
-        const res = await fetch(`${BASE_URL}/competencies`, {
-          headers: { "Authorization": `Bearer ${authToken}` }
-        });
-        const comps = await res.json();
-        availableCompetencies = Array.isArray(comps) ? comps : (comps.competencies || []);
-
-        if (availableCompetencies.length === 0) {
-          container.innerHTML = `<p>Aucune compétence trouvée.</p>`;
-          return;
-        }
-
-        container.innerHTML = availableCompetencies.map(comp => `
-          <div class="card" style="padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <strong style="font-size: 0.95rem;">${comp}</strong>
-            <button class="btn btn-secondary btn-select-comp" data-comp="${comp}" style="padding: 0.35rem 0.85rem; font-size: 0.85rem;">
-              Sélectionner
-            </button>
-          </div>
-        `).join("");
-
-        document.querySelectorAll(".btn-select-comp").forEach(btn => {
-          btn.addEventListener("click", (e) => {
-            const comp = e.currentTarget.getAttribute("data-comp");
-            selectCompetencyForSubmission(comp);
-          });
-        });
-
-      } catch (err) {
-        container.innerHTML = `<p style="color: var(--danger);">Erreur lors de la récupération des compétences.</p>`;
-      }
-    }
-
-    function selectCompetencyForSubmission(compName) {
-      subCompetencyInput.value = compName;
-      btnSubmitEval.disabled = false;
-      document.getElementById("submission-card-title").textContent = `Soumission — ${compName}`;
-      subTextInput.focus();
-    }
-
     document.getElementById("form-submission").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const comp = subCompetencyInput.value;
       const type = subTypeSelect.value;
       const text = subTextInput.value.trim();
 
-      if (!comp || !text) return;
+      if (!text) return;
 
       btnSubmitEval.disabled = true;
       btnSubmitEval.textContent = "Évaluation en cours par l'IA...";
 
       try {
+        const payload = {
+          submission_text: text,
+          submission_type: type
+        };
+
+        // Include suggestion_id if responding to a suggestion
+        if (currentSuggestionId) {
+          payload.suggestion_id = currentSuggestionId;
+        }
+
         const res = await fetch(`${BASE_URL}/submit`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${authToken}`
           },
-          body: JSON.stringify({
-            competency: comp,
-            submission_type: type,
-            code: text
-          })
+          body: JSON.stringify(payload)
         });
 
         const data = await res.json();
@@ -949,7 +554,10 @@
           throw new Error(data.detail || "Erreur lors de l'évaluation.");
         }
 
-        renderEvaluationResult(data, comp);
+        renderEvaluationResult(data, data.competency);
+        
+        // Reset suggestion state after successful submission
+        currentSuggestionId = null;
       } catch (err) {
         alert(`Erreur: ${err.message}`);
       } finally {
@@ -964,7 +572,7 @@
       const levelStr = result.mastery_level || "Level 0";
       const levelInt = parseInt(levelStr.replace("Level ", "")) || 0;
 
-      document.getElementById("res-competency").textContent = competencyName;
+      document.getElementById("res-competency").textContent = result.competency || competencyName;
       document.getElementById("res-level-pill").textContent = `Niveau ${levelInt}`;
       document.getElementById("res-confidence").textContent = `${Math.round((result.confidence || 0.9) * 100)}%`;
       document.getElementById("res-feedback").textContent = result.feedback || "Aucun feedback textuel fourni.";
@@ -1019,42 +627,123 @@
           headers: { "Authorization": `Bearer ${authToken}` }
         });
 
-        if (!res.ok) throw new Error("Impossible de récupérer le rapport.");
+        if (!res.ok) throw new Error("Impossible de charger le rapport.");
         const data = await res.json();
 
+        // Display assessments
         if (!data.assessments || data.assessments.length === 0) {
-          assessList.innerHTML = `<p style="font-size: 0.9rem;">Aucune soumission enregistrée.</p>`;
+          assessList.innerHTML = `<p style="font-size: 0.9rem;">Aucune évaluation disponible.</p>`;
         } else {
           assessList.innerHTML = data.assessments.map(a => `
-            <div class="card" style="padding: 1rem;">
+            <div class="card" style="padding: 1rem; margin-bottom: 0.75rem;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <strong>${a.competency}</strong>
-                <span class="badge-pill badge-pill-primary">Niveau ${a.level}</span>
+                <span class="badge-pill badge-pill-primary">${a.mastery_level}</span>
               </div>
-              <p style="font-size: 0.8rem; margin-top: 0.35rem;">Type : ${a.submission_type || 'N/A'}</p>
-              <p style="font-size: 0.8rem; color: var(--text-subtle);">${a.timestamp || ''}</p>
+              <p style="font-size: 0.8rem; margin-top: 0.35rem;">Type: ${a.submission_type}</p>
+              <p style="font-size: 0.8rem; color: var(--text-subtle);">Confiance: ${(a.confidence * 100).toFixed(0)}%</p>
+              <p style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-muted);">${a.feedback}</p>
             </div>
           `).join("");
         }
 
+        // Display badges
         if (!data.badges || data.badges.length === 0) {
           badgesList.innerHTML = `<p style="font-size: 0.9rem;">Aucun badge obtenu pour le moment.</p>`;
         } else {
           badgesList.innerHTML = data.badges.map(b => `
-            <div class="card" style="padding: 1rem; display: flex; align-items: center; gap: 1rem;">
-              <img src="${BASE_URL}${b.image_url}" style="width: 54px; height: 54px; object-fit: contain;" alt="Badge" />
-              <div>
-                <strong>${b.competency}</strong>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">${b.description}</p>
+            <div class="card" style="padding: 1rem; margin-bottom: 0.75rem;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 60px; height: 60px; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-main);">
+                  <img src="${BASE_URL}${b.image_url}" alt="Badge" style="width: 100%; height: 100%; object-fit: contain;" />
+                </div>
+                <div>
+                  <strong>${b.competency}</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">Niveau: ${b.achievement_level}</p>
+                  <p style="font-size: 0.75rem; color: var(--text-subtle);">${new Date(b.issue_date).toLocaleDateString()}</p>
+                </div>
               </div>
             </div>
           `).join("");
         }
-
       } catch (err) {
-        assessList.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">Erreur de chargement du rapport.</p>`;
+        assessList.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur: ${err.message}</p>`;
+        badgesList.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur de chargement.</p>`;
       }
     }
+
+    /* ===== STUDENT SUGGESTIONS LOGIC ===== */
+    async function loadStudentSuggestions() {
+      const container = document.getElementById("suggestions-list-container");
+
+      try {
+        const res = await fetch(`${BASE_URL}/me/suggestions`, {
+          headers: { "Authorization": `Bearer ${authToken}` }
+        });
+
+        if (!res.ok) throw new Error("Impossible de charger les suggestions.");
+        const suggestions = await res.json();
+
+        if (!suggestions || suggestions.length === 0) {
+          container.innerHTML = `<p style="font-size: 0.9rem;">Aucune suggestion reçue pour le moment.</p>`;
+          return;
+        }
+
+        container.innerHTML = suggestions.map(s => {
+          const isAnswered = s.response_assessment_id !== null;
+          const statusBadge = isAnswered 
+            ? `<span class="badge-pill badge-pill-success">Répondu - ${s.response_mastery_level}</span>`
+            : `<span class="badge-pill badge-pill-primary">En attente</span>`;
+
+          const actionButton = isAnswered
+            ? `<button class="btn btn-secondary" disabled style="opacity: 0.6; cursor: not-allowed;">Déjà répondu</button>`
+            : `<button class="btn btn-primary" onclick="respondToSuggestion('${s.id}', '${s.competency}', '${s.activity_type}')">Répondre</button>`;
+
+          return `
+            <div class="card" style="padding: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <div>
+                  <strong>${s.competency}</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Type: ${s.activity_type}</p>
+                </div>
+                ${statusBadge}
+              </div>
+              <div style="background: var(--bg-main); padding: 0.85rem; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                <p style="font-size: 0.9rem; margin: 0;">${s.message}</p>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="font-size: 0.75rem; color: var(--text-subtle);">${new Date(s.created_at).toLocaleDateString()}</p>
+                ${actionButton}
+              </div>
+              ${isAnswered && s.response_submission_text ? `
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Votre réponse:</p>
+                  <p style="font-size: 0.85rem; font-style: italic;">${s.response_submission_text}</p>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join("");
+      } catch (err) {
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur: ${err.message}</p>`;
+      }
+    }
+
+    let currentSuggestionId = null;
+
+    function respondToSuggestion(suggestionId, competency, activityType) {
+      currentSuggestionId = suggestionId;
+      
+      // Switch to dashboard tab
+      tabBtnDashboard.click();
+      
+      // Pre-fill the type select
+      subTypeSelect.value = activityType;
+      
+      // Show notification
+      alert(`Répondez à la suggestion sur "${competency}". L'IA analysera votre soumission pour cette compétence.`);
+    }
+
   </script>
 </body>
 </html>

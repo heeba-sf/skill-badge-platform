@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, EmailStr, Field
 
@@ -28,6 +28,7 @@ class MasteryLevel(str, Enum):
 
 
 class UserRegister(BaseModel):
+    fullname: str = Field(..., min_length=1)
     email: EmailStr
     password: str = Field(..., min_length=8)
     role: UserRole
@@ -41,6 +42,7 @@ class UserLogin(BaseModel):
 
 class UserResponse(BaseModel):
     id: str
+    fullname: str
     email: EmailStr
     role: UserRole
 
@@ -54,9 +56,9 @@ class TokenResponse(BaseModel):
 
 
 class SubmissionRequest(BaseModel):
-    competency: str
-    submission_type: str
-    code: str
+    submission_text: str = Field(..., min_length=1)
+    submission_type: SubmissionType
+    suggestion_id: Optional[str] = None
 
 
 class AssessmentResponse(BaseModel):
@@ -66,6 +68,7 @@ class AssessmentResponse(BaseModel):
     mastery_level: MasteryLevel
     confidence: float
     feedback: str
+    suggestion_id: Optional[str] = None
     created_at: datetime
 
     model_config = {"from_attributes": True}
@@ -112,12 +115,16 @@ class SuggestedActivityResponse(BaseModel):
     activity_type: str
     message: str
     created_at: datetime
+    response_assessment_id: Optional[str] = None
+    response_mastery_level: Optional[str] = None
+    response_submission_text: Optional[str] = None
 
     model_config = {"from_attributes": True}
 
 
 class StudentReportResponse(BaseModel):
     student_id: str
+    fullname: str
     email: str
     competencies: List[str]
 

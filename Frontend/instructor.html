@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Badge Platform — Espace Instructeur</title>
+
+  <!-- ========================================== -->
+  <!-- CSS DESIGN SYSTEM & REUSABLE VARIABLES     -->
+  <!-- ========================================== -->
+  <style>
+    :root {
+      /* Color Palette */
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-ring: rgba(79, 70, 229, 0.2);
+      
+      --secondary: #0ea5e9;
+      --secondary-light: #e0f2fe;
+      
+      --accent: #8b5cf6;
+      --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fef2f2;
+
+      /* Neutrals & Surfaces */
+      --bg-main: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-glass: rgba(255, 255, 255, 0.85);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      --border-color: #e2e8f0;
+      --border-hover: #cbd5e1;
+
+      /* Elevations & Borders */
+      --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.15);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Common Card Components */
+    .card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 1.75rem;
+      transition: var(--transition);
+    }
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      gap: 0.5rem;
+      user-select: none;
+    }
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+    .btn-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    .btn-secondary {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover {
+      background-color: var(--bg-main);
+      border-color: var(--border-hover);
+    }
+    .btn-block {
+      width: 100%;
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Forms & Inputs */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-ring);
+    }
+    textarea.form-control {
+      min-height: 140px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      resize: vertical;
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 0.85rem 1.15rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .alert-error {
+      background-color: var(--danger-light);
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .alert-success {
+      background-color: var(--success-light);
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    /* Badge & Tags */
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-pill-primary {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+    .badge-pill-success {
+      background-color: var(--success-light);
+      color: var(--success);
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 0.85rem 1.15rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .alert-error {
+      background-color: var(--danger-light);
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .alert-success {
+      background-color: var(--success-light);
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.85rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .navbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    /* Layout Utility */
+    .hidden {
+      display: none !important;
+    }
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .grid-2 {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    /* ========================================== */
+    /* INSTRUCTOR DASHBOARD SPECIFIC STYLES        */
+    /* ========================================== */
+    .student-card {
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .student-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .domains-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .suggestion-item {
+      border-left: 3px solid var(--primary);
+      padding-left: 1rem;
+      margin-bottom: 1rem;
+    }
+    .badge-image-frame {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .badge-image-frame img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!-- INSTRUCTOR DASHBOARD MAIN APPLICATION          -->
+  <!-- ========================================== -->
+  <div id="app-section">
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container navbar-inner">
+        <a href="#" class="navbar-brand">
+          👨‍🏫 <span>Skill Badge Platform</span>
+        </a>
+        <button id="btn-logout" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;">Déconnexion</button>
+      </div>
+    </header>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      
+      <!-- VIEW A: Main Dashboard -->
+      <section id="view-dashboard">
+        <!-- Instructor Domains Header -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3 style="margin-bottom: 0.5rem;">🎯 Vos Domaines d'Enseignement</h3>
+          <div id="instructor-domains-header" class="domains-header">
+            <p style="font-size: 0.9rem;">Chargement de vos domaines...</p>
+          </div>
+        </div>
+
+        <!-- Students List -->
+        <div class="card">
+          <h3 style="margin-bottom: 0.5rem;">👥 Étudiants Actifs dans vos Domaines</h3>
+          <p style="margin-bottom: 1.25rem;">Cliquez sur un étudiant pour voir son rapport détaillé.</p>
+          <div id="students-list-container" class="grid" style="gap: 1rem;">
+            <p>Chargement des étudiants...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW B: Student Detail -->
+      <section id="view-student-detail" class="hidden">
+        <button id="btn-back-to-dashboard" class="btn btn-secondary" style="margin-bottom: 1.5rem;">
+          ← Retour à la liste des étudiants
+        </button>
+
+        <div class="card" style="margin-bottom: 2rem;">
+          <h3 id="student-detail-name" style="margin-bottom: 0.25rem;">Détail de l'étudiant</h3>
+          <p id="student-detail-email" style="color: var(--text-muted);"></p>
+        </div>
+
+        <div class="grid grid-2" style="margin-bottom: 2rem;">
+          <!-- Student Assessments -->
+          <div class="card">
+            <h4 style="margin-bottom: 1rem;">📝 Évaluations</h4>
+            <div id="student-assessments-list">
+              <p>Chargement des évaluations...</p>
+            </div>
+          </div>
+
+          <!-- Student Badges -->
+          <div class="card">
+            <h4 style="margin-bottom: 1rem;">🏆 Badges Obtenus</h4>
+            <div id="student-badges-list">
+              <p>Chargement des badges...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Suggestions Section -->
+        <div class="card">
+          <h4 style="margin-bottom: 1rem;">💬 Suggestions d'Activités</h4>
+          
+          <!-- Past Suggestions -->
+          <div id="student-suggestions-list" style="margin-bottom: 2rem;">
+            <p>Chargement des suggestions...</p>
+          </div>
+
+          <!-- Suggest Activity Form -->
+          <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+            <h5 style="margin-bottom: 1rem;">Suggérer une nouvelle activité</h5>
+            <form id="form-suggest-activity">
+              <div class="form-group">
+                <label for="suggest-competency">Compétence</label>
+                <select id="suggest-competency" class="form-control" required>
+                  <option value="">Sélectionnez une compétence...</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="suggest-type">Type d'activité</label>
+                <select id="suggest-type" class="form-control" required>
+                  <option value="assignment">Assignment (Devoir / TP)</option>
+                  <option value="project">Project (Projet)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="suggest-message">Message / Instructions</label>
+                <textarea id="suggest-message" class="form-control" required placeholder="Décrivez l'activité suggérée..."></textarea>
+              </div>
+              <button type="submit" id="btn-submit-suggestion" class="btn btn-primary">Envoyer la suggestion</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 3. JAVASCRIPT APPLICATION LOGIC           -->
+  <!-- ========================================== -->
+  <script>
+    const BASE_URL = "http://127.0.0.1:8000";
+    let authToken = null;
+    let currentStudentId = null;
+    let instructorDomains = [];
+
+    /* ===== SESSION STORAGE CHECK ===== */
+    function checkAuthentication() {
+      authToken = sessionStorage.getItem('access_token');
+      const userRole = sessionStorage.getItem('role');
+
+      if (!authToken || userRole !== 'instructor') {
+        // Redirect to index if not authenticated or wrong role
+        window.location.href = 'index.html';
+        return false;
+      }
+      return true;
+    }
+
+    /* ===== DOM ELEMENTS ===== */
+    const appSection = document.getElementById("app-section");
+    const viewDashboard = document.getElementById("view-dashboard");
+    const viewStudentDetail = document.getElementById("view-student-detail");
+
+    /* ===== INITIALIZATION ===== */
+    document.addEventListener('DOMContentLoaded', () => {
+      if (checkAuthentication()) {
+        appSection.classList.remove("hidden");
+        initInstructorDashboard();
+      }
+    });
+
+    /* ===== LOGOUT HANDLER ===== */
+    document.getElementById("btn-logout").addEventListener("click", () => {
+      sessionStorage.clear();
+      window.location.href = 'index.html';
+    });
+
+    /* ===== INSTRUCTOR DASHBOARD LOGIC ===== */
+    function initInstructorDashboard() {
+      loadInstructorDomains();
+      loadInstructorStudents();
+    }
+
+    async function loadInstructorDomains() {
+      const container = document.getElementById("instructor-domains-header");
+      try {
+        const res = await fetch(`${BASE_URL}/instructor/domains`, {
+          headers: { "Authorization": `Bearer ${authToken}` }
+        });
+
+        if (!res.ok) {
+          throw new Error("Impossible de charger vos domaines.");
+        }
+
+        const domains = await res.json();
+        instructorDomains = Array.isArray(domains) ? domains : [];
+
+        if (instructorDomains.length === 0) {
+          container.innerHTML = `<p style="font-size: 0.9rem;">Aucun domaine assigné.</p>`;
+        } else {
+          container.innerHTML = instructorDomains.map(domain => `
+            <span class="badge-pill badge-pill-primary">${domain}</span>
+          `).join("");
+        }
+      } catch (err) {
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">Erreur de chargement des domaines.</p>`;
+      }
+    }
+
+    async function loadInstructorStudents() {
+      const container = document.getElementById("students-list-container");
+      try {
+        const res = await fetch(`${BASE_URL}/instructor/students`, {
+          headers: { "Authorization": `Bearer ${authToken}` }
+        });
+
+        if (!res.ok) {
+          throw new Error("Impossible de charger les étudiants.");
+        }
+
+        const students = await res.json();
+
+        if (!Array.isArray(students) || students.length === 0) {
+          container.innerHTML = `<p style="font-size: 0.9rem;">Aucun étudiant actif dans vos domaines.</p>`;
+          return;
+        }
+
+        container.innerHTML = students.map(student => `
+          <div class="card student-card" data-student-id="${student.student_id}">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <strong style="font-size: 1rem;">${student.fullname || student.email}</strong>
+                <p style="font-size: 0.85rem; margin-top: 0.35rem; color: var(--text-muted);">${student.email}</p>
+              </div>
+              <span class="badge-pill badge-pill-success">${student.competencies.length} domaine(s)</span>
+            </div>
+            <div style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.35rem;">
+              ${student.competencies.map(comp => `
+                <span class="badge-pill badge-pill-primary" style="font-size: 0.7rem;">${comp}</span>
+              `).join("")}
+            </div>
+          </div>
+        `).join("");
+
+        document.querySelectorAll(".student-card").forEach(card => {
+          card.addEventListener("click", () => {
+            const studentId = card.getAttribute("data-student-id");
+            const studentName = card.querySelector("strong").textContent;
+            const studentEmail = card.querySelector("p").textContent;
+            showStudentDetail(studentId, studentName, studentEmail);
+          });
+        });
+
+      } catch (err) {
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">Erreur de chargement des étudiants.</p>`;
+      }
+    }
+
+    function showStudentDetail(studentId, studentName, studentEmail) {
+      currentStudentId = studentId;
+      viewDashboard.classList.add("hidden");
+      viewStudentDetail.classList.remove("hidden");
+
+      document.getElementById("student-detail-name").textContent = studentName;
+      document.getElementById("student-detail-email").textContent = studentEmail;
+
+      loadStudentReport(studentId);
+      loadStudentSuggestions(studentId);
+      populateSuggestionForm();
+    }
+
+    async function loadStudentReport(studentId) {
+      const container = document.getElementById("student-assessments-list");
+      const badgesContainer = document.getElementById("student-badges-list");
+
+      try {
+        const res = await fetch(`${BASE_URL}/instructor/students/${studentId}/report`, {
+          headers: { "Authorization": `Bearer ${authToken}` }
+        });
+
+        if (res.status === 403) {
+          container.innerHTML = `<p style="color: var(--warning); font-size: 0.9rem;">Cet étudiant n'a aucune activité dans vos domaines.</p>`;
+          badgesContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">-</p>`;
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error("Impossible de charger le rapport de l'étudiant.");
+        }
+
+        const data = await res.json();
+
+        // Display assessments
+        if (!data.assessments || data.assessments.length === 0) {
+          container.innerHTML = `<p style="font-size: 0.9rem;">Aucune évaluation disponible.</p>`;
+        } else {
+          container.innerHTML = data.assessments.map(a => `
+            <div class="card" style="padding: 1rem; margin-bottom: 0.75rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>${a.competency}</strong>
+                <span class="badge-pill badge-pill-primary">${a.mastery_level}</span>
+              </div>
+              <p style="font-size: 0.8rem; margin-top: 0.35rem;">Type: ${a.submission_type}</p>
+              <p style="font-size: 0.8rem; color: var(--text-subtle);">Confiance: ${(a.confidence * 100).toFixed(0)}%</p>
+              <p style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-muted);">${a.feedback}</p>
+            </div>
+          `).join("");
+        }
+
+        // Display badges
+        if (!data.badges || data.badges.length === 0) {
+          badgesContainer.innerHTML = `<p style="font-size: 0.9rem;">Aucun badge obtenu.</p>`;
+        } else {
+          badgesContainer.innerHTML = data.badges.map(b => `
+            <div class="card" style="padding: 1rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
+              <div class="badge-image-frame">
+                <img src="${BASE_URL}${b.image_url}" alt="Badge" />
+              </div>
+              <div>
+                <strong>${b.competency}</strong>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">${b.achievement_level}</p>
+                <p style="font-size: 0.75rem; color: var(--text-subtle);">${b.description}</p>
+              </div>
+            </div>
+          `).join("");
+        }
+
+      } catch (err) {
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">Erreur de chargement du rapport.</p>`;
+        badgesContainer.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">-</p>`;
+      }
+    }
+
+    async function loadStudentSuggestions(studentId) {
+      const container = document.getElementById("student-suggestions-list");
+      try {
+        const res = await fetch(`${BASE_URL}/instructor/students/${studentId}/suggestions`, {
+          headers: { "Authorization": `Bearer ${authToken}` }
+        });
+
+        if (!res.ok) {
+          throw new Error("Impossible de charger les suggestions.");
+        }
+
+        const suggestions = await res.json();
+
+        if (!Array.isArray(suggestions) || suggestions.length === 0) {
+          container.innerHTML = `<p style="font-size: 0.9rem; color: var(--text-muted);">Aucune suggestion envoyée pour le moment.</p>`;
+          return;
+        }
+
+        container.innerHTML = suggestions.map(s => {
+          const isAnswered = s.response_assessment_id !== null;
+          const statusBadge = isAnswered 
+            ? `<span class="badge-pill badge-pill-success">Répondu - ${s.response_mastery_level}</span>`
+            : `<span class="badge-pill badge-pill-primary">En attente</span>`;
+
+          return `
+            <div class="suggestion-item">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                <strong>${s.competency}</strong>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                  <span class="badge-pill badge-pill-primary">${s.activity_type}</span>
+                  ${statusBadge}
+                </div>
+              </div>
+              <p style="font-size: 0.9rem; margin-bottom: 0.35rem;">${s.message}</p>
+              <p style="font-size: 0.75rem; color: var(--text-subtle);">${new Date(s.created_at).toLocaleString('fr-FR')}</p>
+              ${isAnswered && s.response_submission_text ? `
+                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color);">
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">Réponse de l'étudiant:</p>
+                  <p style="font-size: 0.85rem; font-style: italic; background: var(--bg-main); padding: 0.5rem; border-radius: var(--radius-sm);">${s.response_submission_text}</p>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join("");
+
+      } catch (err) {
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">Erreur de chargement des suggestions.</p>`;
+      }
+    }
+
+    function populateSuggestionForm() {
+      const select = document.getElementById("suggest-competency");
+      select.innerHTML = `<option value="">Sélectionnez une compétence...</option>`;
+      
+      instructorDomains.forEach(domain => {
+        const option = document.createElement("option");
+        option.value = domain;
+        option.textContent = domain;
+        select.appendChild(option);
+      });
+    }
+
+    document.getElementById("form-suggest-activity").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      if (!currentStudentId) {
+        alert("Aucun étudiant sélectionné.");
+        return;
+      }
+
+      const competency = document.getElementById("suggest-competency").value;
+      const activityType = document.getElementById("suggest-type").value;
+      const message = document.getElementById("suggest-message").value.trim();
+
+      if (!competency || !message) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+      }
+
+      const submitBtn = document.getElementById("btn-submit-suggestion");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Envoi en cours...";
+
+      try {
+        const res = await fetch(`${BASE_URL}/instructor/students/${currentStudentId}/suggest-activity`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            competency: competency,
+            activity_type: activityType,
+            message: message
+          })
+        });
+
+        if (res.status === 400) {
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.detail || "Erreur de validation.");
+        }
+
+        if (!res.ok) {
+          throw new Error("Impossible d'envoyer la suggestion.");
+        }
+
+        // Reset form and refresh suggestions
+        document.getElementById("form-suggest-activity").reset();
+        loadStudentSuggestions(currentStudentId);
+        alert("Suggestion envoyée avec succès !");
+
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Envoyer la suggestion";
+      }
+    });
+
+    document.getElementById("btn-back-to-dashboard").addEventListener("click", () => {
+      currentStudentId = null;
+      viewStudentDetail.classList.add("hidden");
+      viewDashboard.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>
