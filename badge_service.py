@@ -36,7 +36,7 @@ def issue_badge_if_eligible(db: Session, assessment: Assessment, user: User) -> 
 
     # 3. Generate unique UUID and image path
     badge_id = str(uuid.uuid4())
-    recipient_display_name = user.email.split("@")[0]  # Fallback display name
+    recipient_display_name = user.fullname
 
     svg_content = generate_badge_svg(
         badge_id=badge_id,

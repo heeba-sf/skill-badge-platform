@@ -29,6 +29,7 @@ class User(Base):
     id: Mapped[str] = mapped_column(
         String(36), primary_key=True, default=lambda: str(uuid.uuid4())
     )
+    fullname: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False)
@@ -41,6 +42,7 @@ class User(Base):
     assessments: Mapped[list["Assessment"]] = relationship(back_populates="user")
     badges: Mapped[list["Badge"]] = relationship(back_populates="user")
     instructor_domains: Mapped[list["InstructorDomain"]] = relationship(back_populates="instructor")
+    received_suggestions: Mapped[list["SuggestedActivity"]] = relationship(foreign_keys="SuggestedActivity.student_id")
 
 
 class Assessment(Base):
@@ -58,6 +60,9 @@ class Assessment(Base):
     mastery_level: Mapped[str] = mapped_column(String(50), nullable=False)
     confidence: Mapped[float] = mapped_column(Float, nullable=False)
     feedback: Mapped[str] = mapped_column(Text, nullable=False)
+    suggestion_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("suggested_activities.id"), nullable=True, index=True
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,
@@ -133,5 +138,6 @@ class SuggestedActivity(Base):
         default=lambda: datetime.now(timezone.utc),
     )
 
-    instructor: Mapped["User"] = relationship(foreign_keys=[instructor_id])
-    student: Mapped["User"] = relationship(foreign_keys=[student_id])
+    instructor: Mapped["User"] = relationship(foreign_keys="SuggestedActivity.instructor_id")
+    student: Mapped["User"] = relationship(foreign_keys="SuggestedActivity.student_id")
+    response_assessment: Mapped["Assessment"] = relationship(foreign_keys="Assessment.suggestion_id")

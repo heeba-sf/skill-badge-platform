@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skill Badge Platform — Espace Étudiant</title>
+
+  <!-- ========================================== -->
+  <!-- CSS DESIGN SYSTEM & REUSABLE VARIABLES     -->
+  <!-- ========================================== -->
+  <style>
+    :root {
+      /* Color Palette */
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-ring: rgba(79, 70, 229, 0.2);
+      
+      --secondary: #0ea5e9;
+      --secondary-light: #e0f2fe;
+      
+      --accent: #8b5cf6;
+      --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      
+      --success: #10b981;
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fef2f2;
+
+      /* Neutrals & Surfaces */
+      --bg-main: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-glass: rgba(255, 255, 255, 0.85);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      --border-color: #e2e8f0;
+      --border-hover: #cbd5e1;
+
+      /* Elevations & Borders */
+      --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.15);
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Common Card Components */
+    .card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 1.75rem;
+      transition: var(--transition);
+    }
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      gap: 0.5rem;
+      user-select: none;
+    }
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+    .btn-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    .btn-secondary {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-secondary:hover {
+      background-color: var(--bg-main);
+      border-color: var(--border-hover);
+    }
+    .btn-block {
+      width: 100%;
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Forms & Inputs */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-ring);
+    }
+    textarea.form-control {
+      min-height: 140px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      resize: vertical;
+    }
+
+
+
+    /* Badge & Tags */
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-pill-primary {
+      background-color: var(--primary-light);
+      color: var(--primary);
+    }
+    .badge-pill-success {
+      background-color: var(--success-light);
+      color: var(--success);
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.85rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .navbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar-brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #f1f5f9;
+      padding: 0.25rem;
+      border-radius: var(--radius-md);
+    }
+    .nav-tab-btn {
+      background: none;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+    .nav-tab-btn.active {
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      box-shadow: var(--shadow-xs);
+    }
+
+    /* Layout Utility */
+    .hidden {
+      display: none !important;
+    }
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .grid-2 {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    /* Badge Showcase Presentation */
+    .badge-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2.25rem;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      border: 1px solid var(--border-color);
+    }
+    .badge-image-frame {
+      width: 140px;
+      height: 140px;
+      margin-bottom: 1.25rem;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      box-shadow: var(--shadow-glow);
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+    .badge-image-frame img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!-- STUDENT DASHBOARD MAIN APPLICATION          -->
+  <!-- ========================================== -->
+  <div id="app-section">
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="container navbar-inner">
+        <a href="#" class="navbar-brand">
+          🎓 <span>Skill Badge Platform</span>
+        </a>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="nav-tabs">
+            <button id="tab-btn-dashboard" class="nav-tab-btn active">Évaluations</button>
+            <button id="tab-btn-suggestions" class="nav-tab-btn">Suggestions reçues</button>
+            <button id="tab-btn-report" class="nav-tab-btn">Mon Rapport</button>
+          </div>
+          <button id="btn-logout" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;">Déconnexion</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      
+      <!-- VIEW A: Dashboard / Submit Activity -->
+      <section id="view-dashboard">
+        <div class="grid grid-2" style="margin-bottom: 2rem;">
+          
+          <!-- Competencies Selector Card -->
+          <div class="card">
+            <h3 style="margin-bottom: 0.35rem;">Informations</h3>
+            <p style="margin-bottom: 1.25rem;">L'IA analysera votre soumission pour déterminer automatiquement la compétence évaluée.</p>
+          </div>
+
+          <!-- Submission Card -->
+          <div class="card">
+            <h3 style="margin-bottom: 0.35rem;" id="submission-card-title">Soumission d'Activité</h3>
+            <p style="margin-bottom: 1.25rem;">Soumettez votre travail pour évaluation par l'IA.</p>
+            
+            <form id="form-submission">
+              <div class="form-group">
+                <label for="sub-type">Type d'activité</label>
+                <select id="sub-type" class="form-control" required>
+                  <option value="assignment">Assignment (Devoir / TP)</option>
+                  <option value="project">Project (Projet)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="sub-text">Code ou Travail Réalisé</label>
+                <textarea id="sub-text" class="form-control" required placeholder="Collez votre code source, script ou réponse détaillée ici..."></textarea>
+              </div>
+              <button type="submit" id="btn-submit-eval" class="btn btn-primary btn-block">Soumettre pour Évaluation</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Evaluation Results & Badge Presentation -->
+        <div id="evaluation-result-container" class="grid grid-2 hidden">
+          <!-- Result Card -->
+          <div class="card" id="result-detail-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <h3>Résultat de l'Évaluation</h3>
+              <span id="res-level-pill" class="badge-pill badge-pill-primary">Niveau 0</span>
+            </div>
+            <div style="margin-bottom: 1.25rem;">
+              <p style="margin-bottom: 0.35rem;"><strong>Compétence :</strong> <span id="res-competency" style="color: var(--text-main);"></span></p>
+              <p><strong>Indice de Confiance :</strong> <span id="res-confidence" style="color: var(--text-main);"></span></p>
+            </div>
+            <div>
+              <h4 style="margin-bottom: 0.5rem;">Feedback de l'Évaluateur :</h4>
+              <div id="res-feedback" style="background: var(--bg-main); padding: 1.1rem; border-radius: var(--radius-md); font-size: 0.9rem; border: 1px solid var(--border-color);"></div>
+            </div>
+          </div>
+
+          <!-- Earned Badge Card -->
+          <div class="card badge-card" id="badge-display-card">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW C: Suggestions Received -->
+      <section id="view-suggestions" class="hidden">
+        <div class="card" style="margin-bottom: 2rem;">
+          <h2 style="margin-bottom: 0.35rem;">Suggestions reçues de vos instructeurs</h2>
+          <p>Répondez aux suggestions d'activités personnalisées de vos instructeurs.</p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-bottom: 1rem;">Suggestions</h3>
+          <div id="suggestions-list-container" class="grid" style="gap: 1rem;">
+            <p>Chargement des suggestions...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW B: Comprehensive Student Report -->
+      <section id="view-report" class="hidden">
+        <div class="card" style="margin-bottom: 2rem;">
+          <h2 style="margin-bottom: 0.35rem;">Mon Historique & Rapport d'Apprentissage</h2>
+          <p>Consultez l'historique complet de vos évaluations et de vos badges obtenus.</p>
+        </div>
+
+        <div class="grid grid-2">
+          <!-- Assessments History -->
+          <div class="card">
+            <h3 style="margin-bottom: 1rem;">Évaluations Passées</h3>
+            <div id="report-assessments-list" class="grid" style="gap: 0.75rem;">
+              <p>Chargement des évaluations...</p>
+            </div>
+          </div>
+
+          <!-- Badges Earned History -->
+          <div class="card">
+            <h3 style="margin-bottom: 1rem;">Badges Obtenus</h3>
+            <div id="report-badges-list" class="grid" style="gap: 0.75rem;">
+              <p>Chargement des badges...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 3. JAVASCRIPT APP LOGIC & API CLIENT       -->
+  <!-- ========================================== -->
+  <script>
+    /* ===== APPLICATION STATE ===== */
+    const BASE_URL = "http://127.0.0.1:8000";
+    let authToken = null;
+    let availableCompetencies = [];
+
+    /* ===== SESSION STORAGE CHECK ===== */
+    function checkAuthentication() {
+      authToken = sessionStorage.getItem('access_token');
+      const userRole = sessionStorage.getItem('role');
+
+      if (!authToken || userRole !== 'student') {
+        // Redirect to index if not authenticated or wrong role
+        window.location.href = 'index.html';
+        return false;
+      }
+      return true;
+    }
+
+    /* ===== DOM ELEMENTS ===== */
+    const appSection = document.getElementById("app-section");
+    const viewDashboard = document.getElementById("view-dashboard");
+    const viewSuggestions = document.getElementById("view-suggestions");
+    const viewReport = document.getElementById("view-report");
+
+    const tabBtnDashboard = document.getElementById("tab-btn-dashboard");
+    const tabBtnSuggestions = document.getElementById("tab-btn-suggestions");
+    const tabBtnReport = document.getElementById("tab-btn-report");
+    const btnLogout = document.getElementById("btn-logout");
+
+    const subTypeSelect = document.getElementById("sub-type");
+    const subTextInput = document.getElementById("sub-text");
+    const btnSubmitEval = document.getElementById("btn-submit-eval");
+    const evalResultContainer = document.getElementById("evaluation-result-container");
+
+    /* ===== INITIALIZATION ===== */
+    document.addEventListener('DOMContentLoaded', () => {
+      if (checkAuthentication()) {
+        appSection.classList.remove("hidden");
+        initAppDashboard();
+      }
+    });
+
+    /* ===== LOGOUT HANDLER ===== */
+    btnLogout.addEventListener("click", () => {
+      sessionStorage.clear();
+      window.location.href = 'index.html';
+    });
+
+    /* ===== STUDENT DASHBOARD & SUBMISSIONS ===== */
+    function initAppDashboard() {
+      // Enable submit button by default since we now use the AI to determine competency
+      btnSubmitEval.disabled = false;
+    }
+
+    tabBtnDashboard.addEventListener("click", () => {
+      tabBtnDashboard.classList.add("active");
+      tabBtnSuggestions.classList.remove("active");
+      tabBtnReport.classList.remove("active");
+      viewDashboard.classList.remove("hidden");
+      viewSuggestions.classList.add("hidden");
+      viewReport.classList.add("hidden");
+    });
+
+    tabBtnSuggestions.addEventListener("click", () => {
+      tabBtnSuggestions.classList.add("active");
+      tabBtnDashboard.classList.remove("active");
+      tabBtnReport.classList.remove("active");
+      viewSuggestions.classList.remove("hidden");
+      viewDashboard.classList.add("hidden");
+      viewReport.classList.add("hidden");
+      loadStudentSuggestions();
+    });
+
+    tabBtnReport.addEventListener("click", () => {
+      tabBtnReport.classList.add("active");
+      tabBtnDashboard.classList.remove("active");
+      tabBtnSuggestions.classList.remove("active");
+      viewReport.classList.remove("hidden");
+      viewDashboard.classList.add("hidden");
+      viewSuggestions.classList.add("hidden");
+      loadStudentReport();
+    });
+
+    document.getElementById("form-submission").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const type = subTypeSelect.value;
+      const text = subTextInput.value.trim();
+
+      if (!text) return;
+
+      btnSubmitEval.disabled = true;
+      btnSubmitEval.textContent = "Évaluation en cours par l'IA...";
+
+      try {
+        const payload = {
+          submission_text: text,
+          submission_type: type
+        };
+
+        // Include suggestion_id if responding to a suggestion
+        if (currentSuggestionId) {
+          payload.suggestion_id = currentSuggestionId;
+        }
+
+        const res = await fetch(`${BASE_URL}/submit`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${authToken}`
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          if (res.status === 422) {
+            console.error("422 Validation Error:", JSON.stringify(data.detail, null, 2));
+            throw new Error("Données de soumission invalides (422). Vérifiez la console.");
+          }
+          throw new Error(data.detail || "Erreur lors de l'évaluation.");
+        }
+
+        renderEvaluationResult(data, data.competency);
+        
+        // Reset suggestion state after successful submission
+        currentSuggestionId = null;
+      } catch (err) {
+        alert(`Erreur: ${err.message}`);
+      } finally {
+        btnSubmitEval.disabled = false;
+        btnSubmitEval.textContent = "Soumettre pour Évaluation";
+      }
+    });
+
+    async function renderEvaluationResult(result, competencyName) {
+      evalResultContainer.classList.remove("hidden");
+      
+      const levelStr = result.mastery_level || "Level 0";
+      const levelInt = parseInt(levelStr.replace("Level ", "")) || 0;
+
+      document.getElementById("res-competency").textContent = result.competency || competencyName;
+      document.getElementById("res-level-pill").textContent = `Niveau ${levelInt}`;
+      document.getElementById("res-confidence").textContent = `${Math.round((result.confidence || 0.9) * 100)}%`;
+      document.getElementById("res-feedback").textContent = result.feedback || "Aucun feedback textuel fourni.";
+
+      const badgeContainer = document.getElementById("badge-display-card");
+      if (levelInt >= 2) {
+        try {
+          const bRes = await fetch(`${BASE_URL}/badges/my-badges`, {
+            headers: { "Authorization": `Bearer ${authToken}` }
+          });
+          const badges = await bRes.json();
+          const badgeList = Array.isArray(badges) ? badges : [badges];
+          const latestBadge = badgeList[badgeList.length - 1];
+
+          if (latestBadge) {
+            const badgeObj = latestBadge.badge || latestBadge;
+            badgeContainer.innerHTML = `
+              <div class="badge-image-frame">
+                <img src="${badgeObj.image || `${BASE_URL}${latestBadge.image_url}`}" alt="Badge" />
+              </div>
+              <h3 style="color: var(--primary); margin-bottom: 0.25rem;">${badgeObj.name || latestBadge.competency}</h3>
+              <span class="badge-pill badge-pill-success" style="margin-bottom: 0.75rem;">Badge Obtenu (Niveau ${levelInt})</span>
+              <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">${badgeObj.description || latestBadge.description}</p>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Émis par : ${badgeObj.issuer?.name || latestBadge.issuer || 'Skill Badge Platform'}</p>
+            `;
+          }
+        } catch (err) {
+          badgeContainer.innerHTML = `<p>Félicitations pour le niveau ${levelInt} !</p>`;
+        }
+      } else {
+        badgeContainer.innerHTML = `
+          <div style="padding: 1.5rem 1rem;">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯</div>
+            <h3>Niveau ${levelInt} Atteint</h3>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+              Améliorez votre soumission pour atteindre le Niveau 2 ou plus et débloquer votre badge vérifiable !
+            </p>
+          </div>
+        `;
+      }
+
+      evalResultContainer.scrollIntoView({ behavior: "smooth" });
+    }
+
+    /* ===== STUDENT REPORT LOGIC ===== */
+    async function loadStudentReport() {
+      const assessList = document.getElementById("report-assessments-list");
+      const badgesList = document.getElementById("report-badges-list");
+
+      try {
+        const res = await fetch(`${BASE_URL}/me/report`, {
+          headers: { "Authorization": `Bearer ${authToken}` }
+        });
+
+        if (!res.ok) throw new Error("Impossible de charger le rapport.");
+        const data = await res.json();
+
+        // Display assessments
+        if (!data.assessments || data.assessments.length === 0) {
+          assessList.innerHTML = `<p style="font-size: 0.9rem;">Aucune évaluation disponible.</p>`;
+        } else {
+          assessList.innerHTML = data.assessments.map(a => `
+            <div class="card" style="padding: 1rem; margin-bottom: 0.75rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong>${a.competency}</strong>
+                <span class="badge-pill badge-pill-primary">${a.mastery_level}</span>
+              </div>
+              <p style="font-size: 0.8rem; margin-top: 0.35rem;">Type: ${a.submission_type}</p>
+              <p style="font-size: 0.8rem; color: var(--text-subtle);">Confiance: ${(a.confidence * 100).toFixed(0)}%</p>
+              <p style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-muted);">${a.feedback}</p>
+            </div>
+          `).join("");
+        }
+
+        // Display badges
+        if (!data.badges || data.badges.length === 0) {
+          badgesList.innerHTML = `<p style="font-size: 0.9rem;">Aucun badge obtenu pour le moment.</p>`;
+        } else {
+          badgesList.innerHTML = data.badges.map(b => `
+            <div class="card" style="padding: 1rem; margin-bottom: 0.75rem;">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 60px; height: 60px; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-main);">
+                  <img src="${BASE_URL}${b.image_url}" alt="Badge" style="width: 100%; height: 100%; object-fit: contain;" />
+                </div>
+                <div>
+                  <strong>${b.competency}</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">Niveau: ${b.achievement_level}</p>
+                  <p style="font-size: 0.75rem; color: var(--text-subtle);">${new Date(b.issue_date).toLocaleDateString()}</p>
+                </div>
+              </div>
+            </div>
+          `).join("");
+        }
+      } catch (err) {
+        assessList.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur: ${err.message}</p>`;
+        badgesList.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur de chargement.</p>`;
+      }
+    }
+
+    /* ===== STUDENT SUGGESTIONS LOGIC ===== */
+    async function loadStudentSuggestions() {
+      const container = document.getElementById("suggestions-list-container");
+
+      try {
+        const res = await fetch(`${BASE_URL}/me/suggestions`, {
+          headers: { "Authorization": `Bearer ${authToken}` }
+        });
+
+        if (!res.ok) throw new Error("Impossible de charger les suggestions.");
+        const suggestions = await res.json();
+
+        if (!suggestions || suggestions.length === 0) {
+          container.innerHTML = `<p style="font-size: 0.9rem;">Aucune suggestion reçue pour le moment.</p>`;
+          return;
+        }
+
+        container.innerHTML = suggestions.map(s => {
+          const isAnswered = s.response_assessment_id !== null;
+          const statusBadge = isAnswered 
+            ? `<span class="badge-pill badge-pill-success">Répondu - ${s.response_mastery_level}</span>`
+            : `<span class="badge-pill badge-pill-primary">En attente</span>`;
+
+          const actionButton = isAnswered
+            ? `<button class="btn btn-secondary" disabled style="opacity: 0.6; cursor: not-allowed;">Déjà répondu</button>`
+            : `<button class="btn btn-primary" onclick="respondToSuggestion('${s.id}', '${s.competency}', '${s.activity_type}')">Répondre</button>`;
+
+          return `
+            <div class="card" style="padding: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                <div>
+                  <strong>${s.competency}</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Type: ${s.activity_type}</p>
+                </div>
+                ${statusBadge}
+              </div>
+              <div style="background: var(--bg-main); padding: 0.85rem; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                <p style="font-size: 0.9rem; margin: 0;">${s.message}</p>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="font-size: 0.75rem; color: var(--text-subtle);">${new Date(s.created_at).toLocaleDateString()}</p>
+                ${actionButton}
+              </div>
+              ${isAnswered && s.response_submission_text ? `
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Votre réponse:</p>
+                  <p style="font-size: 0.85rem; font-style: italic;">${s.response_submission_text}</p>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }).join("");
+      } catch (err) {
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur: ${err.message}</p>`;
+      }
+    }
+
+    let currentSuggestionId = null;
+
+    function respondToSuggestion(suggestionId, competency, activityType) {
+      currentSuggestionId = suggestionId;
+      
+      // Switch to dashboard tab
+      tabBtnDashboard.click();
+      
+      // Pre-fill the type select
+      subTypeSelect.value = activityType;
+      
+      // Show notification
+      alert(`Répondez à la suggestion sur "${competency}". L'IA analysera votre soumission pour cette compétence.`);
+    }
+
+  </script>
+</body>
+</html>
