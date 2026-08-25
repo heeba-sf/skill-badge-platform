@@ -4,57 +4,42 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skill Badge Platform — Connexion</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- ========================================== -->
   <!-- CSS DESIGN SYSTEM & REUSABLE VARIABLES     -->
   <!-- ========================================== -->
   <style>
     :root {
-      /* Color Palette */
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-light: #eef2ff;
-      --primary-ring: rgba(79, 70, 229, 0.2);
-      
-      --secondary: #0ea5e9;
-      --secondary-light: #e0f2fe;
-      
-      --accent: #8b5cf6;
-      --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      
-      --success: #10b981;
-      --success-light: #ecfdf5;
-      --warning: #f59e0b;
-      --warning-light: #fef3c7;
-      --danger: #ef4444;
-      --danger-light: #fef2f2;
+      /* Security-Themed Color Palette */
+      --base-navy: #0A1E2C;
+      --surface-slate: #1B2E3B;
+      --content-white: #F8FAFC;
+      --verification-gold: #C4A052;
+      --success-emerald: #2E7D32;
+      --text-charcoal: #2D3748;
+      --text-muted: #64748B;
+      --border-color: #334E5E;
+      --border-focus: #C4A052;
 
-      /* Neutrals & Surfaces */
-      --bg-main: #f8fafc;
-      --bg-surface: #ffffff;
-      --bg-glass: rgba(255, 255, 255, 0.85);
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --text-subtle: #94a3b8;
-      --border-color: #e2e8f0;
-      --border-hover: #cbd5e1;
+      /* Typography */
+      --font-display: 'IBM Plex Serif', serif;
+      --font-body: 'Source Sans Pro', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
 
-      /* Elevations & Borders */
-      --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-      --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.15);
+      /* Spacing & Layout */
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --container-max: 500px;
 
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 18px;
-      --radius-xl: 24px;
-      --radius-full: 9999px;
-
-      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      /* Transitions */
+      --transition: all 0.15s ease;
     }
 
     * {
@@ -64,46 +49,99 @@
     }
 
     body {
-      font-family: var(--font-main);
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      line-height: 1.5;
+      font-family: var(--font-body);
+      background-color: var(--base-navy);
+      color: var(--content-white);
+      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Container */
-    .container {
-      width: 100%;
-      max-width: 1140px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-
     /* Typography */
     h1, h2, h3, h4 {
+      font-family: var(--font-display);
       font-weight: 700;
-      color: var(--text-main);
-      letter-spacing: -0.02em;
+      color: var(--content-white);
+      letter-spacing: -0.01em;
     }
     p {
       color: var(--text-muted);
       font-size: 0.95rem;
     }
 
-    /* Common Card Components */
-    .card {
-      background: var(--bg-surface);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      padding: 1.75rem;
-      transition: var(--transition);
+    /* Secure Portal Layout */
+    .auth-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-xl);
+      background: var(--base-navy);
     }
-    .card:hover {
-      box-shadow: var(--shadow-md);
+
+    .auth-card {
+      width: 100%;
+      max-width: var(--container-max);
+      background: var(--surface-slate);
+      border: 2px solid var(--border-color);
+      padding: var(--spacing-xl);
+      position: relative;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .auth-icon-badge {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-md);
+      color: var(--verification-gold);
+    }
+
+    /* Security Clearance Role Cards */
+    .role-selection-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .role-card {
+      border: 2px solid var(--border-color);
+      padding: var(--spacing-lg);
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      background: var(--base-navy);
+    }
+
+    .role-card:hover {
+      border-color: var(--verification-gold);
+    }
+
+    .role-card.selected {
+      border-color: var(--verification-gold);
+      background: rgba(196, 160, 82, 0.1);
+    }
+
+    .role-card:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
+    }
+
+    .role-card-icon {
+      font-size: 1.75rem;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .role-card h4 {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
     }
 
     /* Buttons */
@@ -113,179 +151,167 @@
       justify-content: center;
       font-size: 0.95rem;
       font-weight: 600;
-      padding: 0.75rem 1.25rem;
-      border-radius: var(--radius-md);
-      border: 1px solid transparent;
+      padding: 0.875rem 1.5rem;
+      border: 2px solid transparent;
       cursor: pointer;
       transition: var(--transition);
       text-decoration: none;
-      gap: 0.5rem;
-      user-select: none;
+      font-family: var(--font-body);
+      width: 100%;
     }
+
     .btn-primary {
-      background: var(--accent-gradient);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      background: var(--verification-gold);
+      color: var(--base-navy);
+      border-color: var(--verification-gold);
     }
+
     .btn-primary:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+      background: #D4B362;
+      border-color: #D4B362;
     }
-    .btn-primary:active {
-      transform: translateY(0);
+
+    .btn-primary:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
     }
+
     .btn-secondary {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
+      background: transparent;
+      border-color: var(--border-color);
+      color: var(--content-white);
     }
+
     .btn-secondary:hover {
-      background-color: var(--bg-main);
-      border-color: var(--border-hover);
+      border-color: var(--verification-gold);
+      color: var(--verification-gold);
     }
+
+    .btn-secondary:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
+    }
+
     .btn-block {
       width: 100%;
     }
+
     .btn:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
-      transform: none !important;
-      box-shadow: none !important;
     }
 
     /* Forms & Inputs */
     .form-group {
-      margin-bottom: 1.25rem;
+      margin-bottom: var(--spacing-lg);
     }
+
     .form-group label {
       display: block;
       font-size: 0.875rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text-main);
+      margin-bottom: var(--spacing-sm);
+      color: var(--content-white);
+      font-family: var(--font-body);
     }
+
     .form-control {
       width: 100%;
-      padding: 0.75rem 1rem;
+      padding: 0.875rem 1rem;
       font-size: 0.95rem;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-surface);
-      color: var(--text-main);
+      border: 2px solid var(--border-color);
+      background: var(--base-navy);
+      color: var(--content-white);
       outline: none;
       transition: var(--transition);
-      font-family: inherit;
+      font-family: var(--font-body);
     }
+
     .form-control:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px var(--primary-ring);
+      border-color: var(--verification-gold);
+    }
+
+    .form-control::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Domain Checkboxes */
+    .domain-checkboxes {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
+      max-height: 200px;
+      overflow-y: auto;
+      padding: var(--spacing-md);
+      border: 2px solid var(--border-color);
+      background: var(--base-navy);
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm);
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: var(--content-white);
+    }
+
+    .checkbox-item input {
+      accent-color: var(--verification-gold);
+      width: 1rem;
+      height: 1rem;
     }
 
     /* Alerts */
     .alert {
-      padding: 0.85rem 1.15rem;
-      border-radius: var(--radius-md);
+      padding: var(--spacing-md);
+      border: 2px solid transparent;
       font-size: 0.9rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: var(--spacing-lg);
       display: none;
       align-items: center;
-      gap: 0.5rem;
-    }
-    .alert-error {
-      background-color: var(--danger-light);
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-    .alert-success {
-      background-color: var(--success-light);
-      color: #065f46;
-      border: 1px solid #a7f3d0;
+      gap: var(--spacing-sm);
+      font-family: var(--font-body);
     }
 
-    /* Layout Utility */
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #FCA5A5;
+      border-color: #EF4444;
+    }
+
+    .alert-success {
+      background: rgba(46, 125, 50, 0.1);
+      color: #86EFAC;
+      border-color: #2E7D32;
+    }
+
+    /* Utility */
     .hidden {
       display: none !important;
     }
 
-    /* ========================================== */
-    /* AUTH / MODAL DESIGN                        */
-    /* ========================================== */
-    .auth-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2.5rem 1.5rem;
-      background: radial-gradient(circle at top, #eef2ff 0%, #f8fafc 50%);
+    /* Responsive */
+    @media (max-width: 768px) {
+      .auth-wrapper {
+        padding: var(--spacing-md);
+      }
+
+      .auth-card {
+        padding: var(--spacing-lg);
+      }
+
+      .role-selection-grid {
+        grid-template-columns: 1fr;
+      }
     }
-    .auth-card {
-      width: 100%;
-      max-width: 480px;
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-lg);
-    }
-    .auth-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .auth-icon-badge {
-      font-size: 3rem;
-      margin-bottom: 0.75rem;
-    }
-    .role-selection-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .role-card {
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .role-card:hover {
-      border-color: var(--primary);
-      background-color: var(--primary-light);
-    }
-    .role-card.selected {
-      border-color: var(--primary);
-      background-color: var(--primary-light);
-      box-shadow: 0 0 0 3px var(--primary-ring);
-    }
-    .role-card-icon {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-    .domain-checkboxes {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      max-height: 200px;
-      overflow-y: auto;
-      padding: 0.5rem;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      background-color: var(--bg-main);
-    }
-    .checkbox-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 0.5rem;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .checkbox-item:hover {
-      background-color: var(--bg-surface);
-    }
-    .checkbox-item input {
-      accent-color: var(--primary);
+
+    /* Accessibility Focus States */
+    *:focus-visible {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
     }
   </style>
 </head>
@@ -295,25 +321,25 @@
   <!-- AUTHENTICATION & LOGIN/SIGNUP MODULE       -->
   <!-- ========================================== -->
   <div id="auth-section" class="auth-wrapper">
-    <div class="card auth-card">
+    <div class="auth-card">
       <div id="auth-alert" class="alert alert-error"></div>
 
       <!-- Welcome View -->
       <div id="auth-choice-view">
         <div class="auth-header">
-          <div class="auth-icon-badge">🎓</div>
-          <h2>Skill Badge Platform</h2>
-          <p style="margin-top: 0.35rem;">Évaluation de compétences et certification Open Badges 2.0</p>
+          <img src="logo1.png" alt="Skill Badge Platform Logo" style="height: 60px; margin-bottom: var(--spacing-md);" />
+          <h2 style="color: var(--verification-gold); font-size: 2rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;">Skill Badge Platform</h2>
+          <p style="margin-top: var(--spacing-sm);">Évaluation de compétences et certification cryptographique</p>
         </div>
-        <button id="btn-show-login" class="btn btn-primary btn-block" style="margin-bottom: 0.85rem;">Se connecter</button>
+        <button id="btn-show-login" class="btn btn-primary btn-block" style="margin-bottom: var(--spacing-md);">Se connecter</button>
         <button id="btn-show-register" class="btn btn-secondary btn-block">Créer un compte</button>
       </div>
 
       <!-- Login View -->
       <div id="auth-login-view" class="hidden">
-        <div class="auth-header" style="margin-bottom: 1.5rem;">
+        <div class="auth-header" style="margin-bottom: var(--spacing-xl);">
           <h2>Connexion</h2>
-          <p style="margin-top: 0.25rem;">Accédez à votre espace</p>
+          <p style="margin-top: var(--spacing-sm);">Accédez à votre espace sécurisé</p>
         </div>
 
         <form id="form-login">
@@ -327,30 +353,30 @@
           </div>
           <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block">Se connecter</button>
         </form>
-        <div style="text-align: center; margin-top: 1.5rem;">
-          <button id="btn-back-to-choice-from-login" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">← Retour</button>
+        <div style="text-align: center; margin-top: var(--spacing-lg);">
+          <button id="btn-back-to-choice-from-login" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">← Retour</button>
         </div>
       </div>
 
       <!-- Multi-step Registration View -->
       <div id="auth-register-view" class="hidden">
-        <div class="auth-header" style="margin-bottom: 1.25rem;">
+        <div class="auth-header" style="margin-bottom: var(--spacing-lg);">
           <h2>Inscription</h2>
-          <p id="register-step-subtitle" style="margin-top: 0.25rem;">Étape 1 : Choisissez votre rôle</p>
+          <p id="register-step-subtitle" style="margin-top: var(--spacing-sm);">Étape 1 : Choisissez votre niveau d'accès</p>
         </div>
 
         <!-- Step 1: Role Selection -->
         <div id="register-step-1">
           <div class="role-selection-grid">
-            <div class="role-card selected" id="role-choice-student">
+            <div class="role-card selected" id="role-choice-student" tabindex="0">
               <div class="role-card-icon">👨‍🎓</div>
               <h4>Étudiant</h4>
-              <p style="font-size: 0.75rem; margin-top: 0.25rem;">Évaluations & Badges</p>
+              <p style="font-size: 0.75rem; margin-top: var(--spacing-sm);">Évaluations & Badges</p>
             </div>
-            <div class="role-card" id="role-choice-instructor">
+            <div class="role-card" id="role-choice-instructor" tabindex="0">
               <div class="role-card-icon">👨‍🏫</div>
               <h4>Instructeur</h4>
-              <p style="font-size: 0.75rem; margin-top: 0.25rem;">Supervision & Domaines</p>
+              <p style="font-size: 0.75rem; margin-top: var(--spacing-sm);">Supervision & Domaines</p>
             </div>
           </div>
           <button id="btn-reg-to-step-2" class="btn btn-primary btn-block">Continuer</button>
@@ -377,7 +403,7 @@
 
           <!-- Step 3 (Optional - Instructor Only): Domains -->
           <div id="instructor-domains-container" class="hidden">
-            <label style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem; display: block;">Domaines d'enseignement :</label>
+            <label style="font-size: 0.875rem; font-weight: 600; margin-bottom: var(--spacing-sm); display: block;">Domaines d'enseignement :</label>
             <div id="reg-domains-list" class="domain-checkboxes">
               <p style="font-size: 0.85rem; color: var(--text-muted);">Chargement des compétences...</p>
             </div>
@@ -386,14 +412,14 @@
             </div>
           </div>
 
-          <div style="display: flex; gap: 0.5rem;">
+          <div style="display: flex; gap: var(--spacing-sm);">
             <button id="btn-reg-back-to-1" class="btn btn-secondary" style="flex: 1;">Retour</button>
             <button id="btn-submit-registration" class="btn btn-primary" style="flex: 2;">Valider</button>
           </div>
         </div>
 
-        <div style="text-align: center; margin-top: 1.5rem;">
-          <button id="btn-back-to-choice-from-reg" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">← Annuler</button>
+        <div style="text-align: center; margin-top: var(--spacing-lg);">
+          <button id="btn-back-to-choice-from-reg" class="btn btn-secondary" style="font-size: 0.85rem; padding: 0.5rem 1rem;">← Annuler</button>
         </div>
       </div>
     </div>
@@ -463,10 +489,24 @@
       roleChoiceInstructor.classList.remove("selected");
     });
 
+    roleChoiceStudent.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        roleChoiceStudent.click();
+      }
+    });
+
     roleChoiceInstructor.addEventListener("click", () => {
       selectedRole = "instructor";
       roleChoiceInstructor.classList.add("selected");
       roleChoiceStudent.classList.remove("selected");
+    });
+
+    roleChoiceInstructor.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        roleChoiceInstructor.click();
+      }
     });
 
     document.getElementById("btn-reg-to-step-2").addEventListener("click", () => {
@@ -485,7 +525,7 @@
     document.getElementById("btn-reg-back-to-1").addEventListener("click", () => {
       regStep2.classList.add("hidden");
       regStep1.classList.remove("hidden");
-      document.getElementById("register-step-subtitle").textContent = "Étape 1 : Choisissez votre rôle";
+      document.getElementById("register-step-subtitle").textContent = "Étape 1 : Choisissez votre niveau d'accès";
     });
 
     async function loadCompetenciesForRegistration() {

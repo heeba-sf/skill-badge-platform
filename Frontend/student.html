@@ -4,57 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skill Badge Platform — Espace Étudiant</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- ========================================== -->
   <!-- CSS DESIGN SYSTEM & REUSABLE VARIABLES     -->
   <!-- ========================================== -->
   <style>
     :root {
-      /* Color Palette */
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-light: #eef2ff;
-      --primary-ring: rgba(79, 70, 229, 0.2);
-      
-      --secondary: #0ea5e9;
-      --secondary-light: #e0f2fe;
-      
-      --accent: #8b5cf6;
-      --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      
-      --success: #10b981;
-      --success-light: #ecfdf5;
-      --warning: #f59e0b;
-      --warning-light: #fef3c7;
-      --danger: #ef4444;
-      --danger-light: #fef2f2;
+      /* Security-Themed Color Palette */
+      --base-navy: #0A1E2C;
+      --surface-slate: #1B2E3B;
+      --content-white: #F8FAFC;
+      --verification-gold: #C4A052;
+      --success-emerald: #2E7D32;
+      --text-charcoal: #2D3748;
+      --text-muted: #64748B;
+      --border-color: #334E5E;
+      --border-focus: #C4A052;
 
-      /* Neutrals & Surfaces */
-      --bg-main: #f8fafc;
-      --bg-surface: #ffffff;
-      --bg-glass: rgba(255, 255, 255, 0.85);
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --text-subtle: #94a3b8;
-      --border-color: #e2e8f0;
-      --border-hover: #cbd5e1;
+      /* Typography */
+      --font-display: 'IBM Plex Serif', serif;
+      --font-body: 'Source Sans Pro', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
 
-      /* Elevations & Borders */
-      --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-      --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.15);
-
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 18px;
-      --radius-xl: 24px;
-      --radius-full: 9999px;
-
-      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      /* Spacing & Layout */
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --container-max: 1140px;
     }
 
     * {
@@ -64,10 +46,10 @@
     }
 
     body {
-      font-family: var(--font-main);
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      line-height: 1.5;
+      font-family: var(--font-body);
+      background-color: var(--content-white);
+      color: var(--text-charcoal);
+      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -77,33 +59,88 @@
     /* Container */
     .container {
       width: 100%;
-      max-width: 1140px;
+      max-width: var(--container-max);
       margin: 0 auto;
-      padding: 0 1.5rem;
+      padding: 0 var(--spacing-lg);
     }
 
     /* Typography */
     h1, h2, h3, h4 {
+      font-family: var(--font-display);
       font-weight: 700;
-      color: var(--text-main);
-      letter-spacing: -0.02em;
+      color: var(--base-navy);
+      letter-spacing: -0.01em;
     }
     p {
       color: var(--text-muted);
       font-size: 0.95rem;
     }
 
-    /* Common Card Components */
-    .card {
-      background: var(--bg-surface);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      padding: 1.75rem;
-      transition: var(--transition);
+    /* Achievement Timeline Layout */
+    .navbar {
+      background: var(--base-navy);
+      border-bottom: 2px solid var(--border-color);
+      padding: var(--spacing-md) 0;
     }
-    .card:hover {
-      box-shadow: var(--shadow-md);
+
+    .navbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar-brand {
+      color: var(--content-white);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .navbar-brand img {
+      height: 40px;
+      width: auto;
+    }
+
+    .navbar-brand span {
+      color: var(--verification-gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+
+    .nav-tab-btn {
+      background: transparent;
+      border: 2px solid transparent;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+
+    .nav-tab-btn:hover {
+      color: var(--content-white);
+      border-color: var(--border-color);
+    }
+
+    .nav-tab-btn.active {
+      color: var(--verification-gold);
+      border-color: var(--verification-gold);
+    }
+
+    .nav-tab-btn:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
     }
 
     /* Buttons */
@@ -114,73 +151,88 @@
       font-size: 0.95rem;
       font-weight: 600;
       padding: 0.75rem 1.25rem;
-      border-radius: var(--radius-md);
-      border: 1px solid transparent;
+      border: 2px solid transparent;
       cursor: pointer;
-      transition: var(--transition);
+      transition: all 0.15s ease;
       text-decoration: none;
-      gap: 0.5rem;
-      user-select: none;
+      font-family: var(--font-body);
     }
+
     .btn-primary {
-      background: var(--accent-gradient);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      background: var(--verification-gold);
+      color: var(--base-navy);
+      border-color: var(--verification-gold);
     }
+
     .btn-primary:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+      background: #D4B362;
+      border-color: #D4B362;
     }
-    .btn-primary:active {
-      transform: translateY(0);
+
+    .btn-primary:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
     }
+
     .btn-secondary {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
+      background: transparent;
+      border-color: var(--border-color);
+      color: var(--text-charcoal);
     }
+
     .btn-secondary:hover {
-      background-color: var(--bg-main);
-      border-color: var(--border-hover);
+      border-color: var(--verification-gold);
+      color: var(--verification-gold);
     }
+
+    .btn-secondary:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
+    }
+
     .btn-block {
       width: 100%;
     }
+
     .btn:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
-      transform: none !important;
-      box-shadow: none !important;
     }
 
     /* Forms & Inputs */
     .form-group {
-      margin-bottom: 1.25rem;
+      margin-bottom: var(--spacing-lg);
     }
+
     .form-group label {
       display: block;
       font-size: 0.875rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text-main);
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-charcoal);
+      font-family: var(--font-body);
     }
+
     .form-control {
       width: 100%;
-      padding: 0.75rem 1rem;
+      padding: 0.875rem 1rem;
       font-size: 0.95rem;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-surface);
-      color: var(--text-main);
+      border: 2px solid var(--border-color);
+      background: var(--content-white);
+      color: var(--text-charcoal);
       outline: none;
-      transition: var(--transition);
-      font-family: inherit;
+      transition: all 0.15s ease;
+      font-family: var(--font-body);
     }
+
     .form-control:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px var(--primary-ring);
+      border-color: var(--verification-gold);
     }
+
+    .form-control::placeholder {
+      color: var(--text-muted);
+    }
+
     textarea.form-control {
       min-height: 140px;
       font-family: var(--font-mono);
@@ -188,117 +240,128 @@
       resize: vertical;
     }
 
+    /* Cards & Panels */
+    .card {
+      background: var(--content-white);
+      border: 2px solid var(--border-color);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-lg);
+    }
 
+    .card h3 {
+      margin-bottom: var(--spacing-md);
+      font-size: 1.25rem;
+    }
 
-    /* Badge & Tags */
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      gap: var(--spacing-lg);
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* Badge Pills */
     .badge-pill {
       display: inline-flex;
       align-items: center;
       padding: 0.3rem 0.75rem;
-      border-radius: var(--radius-full);
+      border-radius: 2px;
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      font-family: var(--font-mono);
     }
+
     .badge-pill-primary {
-      background-color: var(--primary-light);
-      color: var(--primary);
+      background: var(--base-navy);
+      color: var(--content-white);
     }
+
     .badge-pill-success {
-      background-color: var(--success-light);
-      color: var(--success);
+      background: var(--success-emerald);
+      color: var(--content-white);
     }
 
-    /* Navbar */
-    .navbar {
-      background-color: var(--bg-glass);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.85rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .navbar-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .navbar-brand {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-    .nav-tabs {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background-color: #f1f5f9;
-      padding: 0.25rem;
-      border-radius: var(--radius-md);
-    }
-    .nav-tab-btn {
-      background: none;
-      border: none;
-      padding: 0.5rem 1rem;
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      border-radius: var(--radius-sm);
-      transition: var(--transition);
-    }
-    .nav-tab-btn.active {
-      background-color: var(--bg-surface);
-      color: var(--text-main);
-      box-shadow: var(--shadow-xs);
+    /* Blockchain Lock Badge */
+    .badge-locked {
+      position: relative;
     }
 
-    /* Layout Utility */
-    .hidden {
-      display: none !important;
-    }
-    .grid {
-      display: grid;
-      gap: 1.5rem;
-    }
-    .grid-2 {
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    .badge-hash-overlay {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      background: rgba(10, 30, 44, 0.9);
+      color: var(--verification-gold);
+      padding: 0.25rem 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
     }
 
-    /* Badge Showcase Presentation */
+    .badge-image-frame {
+      width: 140px;
+      height: 140px;
+      margin-bottom: var(--spacing-lg);
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--content-white);
+      padding: var(--spacing-md);
+    }
+
+    .badge-image-frame img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
     .badge-card {
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 2.25rem;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-      border: 1px solid var(--border-color);
+      padding: var(--spacing-xl);
+      background: var(--content-white);
+      border: 2px solid var(--border-color);
     }
-    .badge-image-frame {
-      width: 140px;
-      height: 140px;
-      margin-bottom: 1.25rem;
-      border-radius: var(--radius-lg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #ffffff;
-      box-shadow: var(--shadow-glow);
-      padding: 0.75rem;
-      border: 1px solid var(--border-color);
+
+    /* Utility */
+    .hidden {
+      display: none !important;
     }
-    .badge-image-frame img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-inner {
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+
+      .nav-tabs {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 0 var(--spacing-md);
+      }
+    }
+
+    /* Accessibility Focus States */
+    *:focus-visible {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
     }
   </style>
 </head>
@@ -312,35 +375,36 @@
     <header class="navbar">
       <div class="container navbar-inner">
         <a href="#" class="navbar-brand">
-          🎓 <span>Skill Badge Platform</span>
+          <img src="logo1.png" alt="Skill Badge Platform Logo" />
+          <span>Skill Badge Platform</span>
         </a>
-        <div style="display: flex; align-items: center; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: var(--spacing-md);">
           <div class="nav-tabs">
             <button id="tab-btn-dashboard" class="nav-tab-btn active">Évaluations</button>
             <button id="tab-btn-suggestions" class="nav-tab-btn">Suggestions reçues</button>
             <button id="tab-btn-report" class="nav-tab-btn">Mon Rapport</button>
           </div>
-          <button id="btn-logout" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;">Déconnexion</button>
+          <button id="btn-logout" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Déconnexion</button>
         </div>
       </div>
     </header>
 
-    <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <main class="container" style="padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xl);">
       
       <!-- VIEW A: Dashboard / Submit Activity -->
       <section id="view-dashboard">
-        <div class="grid grid-2" style="margin-bottom: 2rem;">
+        <div class="grid grid-2" style="margin-bottom: var(--spacing-xl);">
           
-          <!-- Competencies Selector Card -->
+          <!-- Information Card -->
           <div class="card">
-            <h3 style="margin-bottom: 0.35rem;">Informations</h3>
-            <p style="margin-bottom: 1.25rem;">L'IA analysera votre soumission pour déterminer automatiquement la compétence évaluée.</p>
+            <h3 style="margin-bottom: var(--spacing-md);">Informations</h3>
+            <p style="margin-bottom: var(--spacing-lg);">L'IA analysera votre soumission pour déterminer automatiquement la compétence évaluée.</p>
           </div>
 
           <!-- Submission Card -->
           <div class="card">
-            <h3 style="margin-bottom: 0.35rem;" id="submission-card-title">Soumission d'Activité</h3>
-            <p style="margin-bottom: 1.25rem;">Soumettez votre travail pour évaluation par l'IA.</p>
+            <h3 style="margin-bottom: var(--spacing-md);" id="submission-card-title">Soumission d'Activité</h3>
+            <p style="margin-bottom: var(--spacing-lg);">Soumettez votre travail pour évaluation par l'IA.</p>
             
             <form id="form-submission">
               <div class="form-group">
@@ -363,17 +427,17 @@
         <div id="evaluation-result-container" class="grid grid-2 hidden">
           <!-- Result Card -->
           <div class="card" id="result-detail-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-lg);">
               <h3>Résultat de l'Évaluation</h3>
               <span id="res-level-pill" class="badge-pill badge-pill-primary">Niveau 0</span>
             </div>
-            <div style="margin-bottom: 1.25rem;">
-              <p style="margin-bottom: 0.35rem;"><strong>Compétence :</strong> <span id="res-competency" style="color: var(--text-main);"></span></p>
-              <p><strong>Indice de Confiance :</strong> <span id="res-confidence" style="color: var(--text-main);"></span></p>
+            <div style="margin-bottom: var(--spacing-lg);">
+              <p style="margin-bottom: var(--spacing-sm);"><strong>Compétence :</strong> <span id="res-competency" style="color: var(--text-charcoal);"></span></p>
+              <p><strong>Indice de Confiance :</strong> <span id="res-confidence" style="color: var(--text-charcoal);"></span></p>
             </div>
             <div>
-              <h4 style="margin-bottom: 0.5rem;">Feedback de l'Évaluateur :</h4>
-              <div id="res-feedback" style="background: var(--bg-main); padding: 1.1rem; border-radius: var(--radius-md); font-size: 0.9rem; border: 1px solid var(--border-color);"></div>
+              <h4 style="margin-bottom: var(--spacing-md);">Feedback de l'Évaluateur :</h4>
+              <div id="res-feedback" style="background: var(--content-white); padding: var(--spacing-lg); border: 2px solid var(--border-color); font-family: var(--font-mono); font-size: 0.9rem;"></div>
             </div>
           </div>
 
@@ -386,14 +450,14 @@
 
       <!-- VIEW C: Suggestions Received -->
       <section id="view-suggestions" class="hidden">
-        <div class="card" style="margin-bottom: 2rem;">
-          <h2 style="margin-bottom: 0.35rem;">Suggestions reçues de vos instructeurs</h2>
+        <div class="card" style="margin-bottom: var(--spacing-xl);">
+          <h2 style="margin-bottom: var(--spacing-md);">Suggestions reçues de vos instructeurs</h2>
           <p>Répondez aux suggestions d'activités personnalisées de vos instructeurs.</p>
         </div>
 
         <div class="card">
-          <h3 style="margin-bottom: 1rem;">Suggestions</h3>
-          <div id="suggestions-list-container" class="grid" style="gap: 1rem;">
+          <h3 style="margin-bottom: var(--spacing-lg);">Suggestions</h3>
+          <div id="suggestions-list-container" class="grid" style="gap: var(--spacing-lg);">
             <p>Chargement des suggestions...</p>
           </div>
         </div>
@@ -401,24 +465,24 @@
 
       <!-- VIEW B: Comprehensive Student Report -->
       <section id="view-report" class="hidden">
-        <div class="card" style="margin-bottom: 2rem;">
-          <h2 style="margin-bottom: 0.35rem;">Mon Historique & Rapport d'Apprentissage</h2>
+        <div class="card" style="margin-bottom: var(--spacing-xl);">
+          <h2 style="margin-bottom: var(--spacing-md);">Mon Historique & Rapport d'Apprentissage</h2>
           <p>Consultez l'historique complet de vos évaluations et de vos badges obtenus.</p>
         </div>
 
         <div class="grid grid-2">
           <!-- Assessments History -->
           <div class="card">
-            <h3 style="margin-bottom: 1rem;">Évaluations Passées</h3>
-            <div id="report-assessments-list" class="grid" style="gap: 0.75rem;">
+            <h3 style="margin-bottom: var(--spacing-lg);">Évaluations Passées</h3>
+            <div id="report-assessments-list" class="grid" style="gap: var(--spacing-md);">
               <p>Chargement des évaluations...</p>
             </div>
           </div>
 
           <!-- Badges Earned History -->
           <div class="card">
-            <h3 style="margin-bottom: 1rem;">Badges Obtenus</h3>
-            <div id="report-badges-list" class="grid" style="gap: 0.75rem;">
+            <h3 style="margin-bottom: var(--spacing-lg);">Badges Obtenus</h3>
+            <div id="report-badges-list" class="grid" style="gap: var(--spacing-md);">
               <p>Chargement des badges...</p>
             </div>
           </div>
@@ -435,7 +499,7 @@
     /* ===== APPLICATION STATE ===== */
     const BASE_URL = "http://127.0.0.1:8000";
     let authToken = null;
-    let availableCompetencies = [];
+    let currentSuggestionId = null;
 
     /* ===== SESSION STORAGE CHECK ===== */
     function checkAuthentication() {
@@ -590,12 +654,13 @@
           if (latestBadge) {
             const badgeObj = latestBadge.badge || latestBadge;
             badgeContainer.innerHTML = `
-              <div class="badge-image-frame">
+              <div class="badge-image-frame badge-locked">
                 <img src="${badgeObj.image || `${BASE_URL}${latestBadge.image_url}`}" alt="Badge" />
+                ${latestBadge.blockchain_tx ? `<div class="badge-hash-overlay">${latestBadge.blockchain_tx.substring(0, 8)}</div>` : ''}
               </div>
-              <h3 style="color: var(--primary); margin-bottom: 0.25rem;">${badgeObj.name || latestBadge.competency}</h3>
-              <span class="badge-pill badge-pill-success" style="margin-bottom: 0.75rem;">Badge Obtenu (Niveau ${levelInt})</span>
-              <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">${badgeObj.description || latestBadge.description}</p>
+              <h3 style="color: var(--verification-gold); margin-bottom: var(--spacing-sm);">${badgeObj.name || latestBadge.competency}</h3>
+              <span class="badge-pill badge-pill-success" style="margin-bottom: var(--spacing-md);">Badge Obtenu (Niveau ${levelInt})</span>
+              <p style="font-size: 0.85rem; margin-bottom: var(--spacing-sm);">${badgeObj.description || latestBadge.description}</p>
               <p style="font-size: 0.75rem; color: var(--text-muted);">Émis par : ${badgeObj.issuer?.name || latestBadge.issuer || 'Skill Badge Platform'}</p>
             `;
           }
@@ -604,10 +669,10 @@
         }
       } else {
         badgeContainer.innerHTML = `
-          <div style="padding: 1.5rem 1rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯</div>
+          <div style="padding: var(--spacing-lg) var(--spacing-md);">
+            <div style="font-size: 2.5rem; margin-bottom: var(--spacing-sm);">🎯</div>
             <h3>Niveau ${levelInt} Atteint</h3>
-            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            <p style="margin-top: var(--spacing-sm); font-size: 0.9rem;">
               Améliorez votre soumission pour atteindre le Niveau 2 ou plus et débloquer votre badge vérifiable !
             </p>
           </div>
@@ -635,14 +700,14 @@
           assessList.innerHTML = `<p style="font-size: 0.9rem;">Aucune évaluation disponible.</p>`;
         } else {
           assessList.innerHTML = data.assessments.map(a => `
-            <div class="card" style="padding: 1rem; margin-bottom: 0.75rem;">
+            <div class="card" style="padding: var(--spacing-lg); margin-bottom: var(--spacing-md);">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <strong>${a.competency}</strong>
                 <span class="badge-pill badge-pill-primary">${a.mastery_level}</span>
               </div>
-              <p style="font-size: 0.8rem; margin-top: 0.35rem;">Type: ${a.submission_type}</p>
-              <p style="font-size: 0.8rem; color: var(--text-subtle);">Confiance: ${(a.confidence * 100).toFixed(0)}%</p>
-              <p style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-muted);">${a.feedback}</p>
+              <p style="font-size: 0.8rem; margin-top: var(--spacing-sm);">Type: ${a.submission_type}</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Confiance: ${(a.confidence * 100).toFixed(0)}%</p>
+              <p style="font-size: 0.85rem; margin-top: var(--spacing-sm); color: var(--text-muted);">${a.feedback}</p>
             </div>
           `).join("");
         }
@@ -652,15 +717,15 @@
           badgesList.innerHTML = `<p style="font-size: 0.9rem;">Aucun badge obtenu pour le moment.</p>`;
         } else {
           badgesList.innerHTML = data.badges.map(b => `
-            <div class="card" style="padding: 1rem; margin-bottom: 0.75rem;">
-              <div style="display: flex; align-items: center; gap: 1rem;">
-                <div style="width: 60px; height: 60px; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-main);">
+            <div class="card" style="padding: var(--spacing-lg); margin-bottom: var(--spacing-md);">
+              <div style="display: flex; align-items: center; gap: var(--spacing-lg);">
+                <div style="width: 60px; height: 60px; border: 2px solid var(--border-color); overflow: hidden; background: var(--content-white);">
                   <img src="${BASE_URL}${b.image_url}" alt="Badge" style="width: 100%; height: 100%; object-fit: contain;" />
                 </div>
                 <div>
                   <strong>${b.competency}</strong>
                   <p style="font-size: 0.8rem; color: var(--text-muted);">Niveau: ${b.achievement_level}</p>
-                  <p style="font-size: 0.75rem; color: var(--text-subtle);">${new Date(b.issue_date).toLocaleDateString()}</p>
+                  <p style="font-size: 0.75rem; color: var(--text-muted);">${new Date(b.issue_date).toLocaleDateString()}</p>
                 </div>
               </div>
             </div>
@@ -700,24 +765,24 @@
             : `<button class="btn btn-primary" onclick="respondToSuggestion('${s.id}', '${s.competency}', '${s.activity_type}')">Répondre</button>`;
 
           return `
-            <div class="card" style="padding: 1.25rem;">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+            <div class="card" style="padding: var(--spacing-xl);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--spacing-lg);">
                 <div>
                   <strong>${s.competency}</strong>
-                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">Type: ${s.activity_type}</p>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: var(--spacing-sm);">Type: ${s.activity_type}</p>
                 </div>
                 ${statusBadge}
               </div>
-              <div style="background: var(--bg-main); padding: 0.85rem; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+              <div style="background: var(--content-white); padding: var(--spacing-lg); border: 2px solid var(--border-color); margin-bottom: var(--spacing-lg);">
                 <p style="font-size: 0.9rem; margin: 0;">${s.message}</p>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <p style="font-size: 0.75rem; color: var(--text-subtle);">${new Date(s.created_at).toLocaleDateString()}</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">${new Date(s.created_at).toLocaleDateString()}</p>
                 ${actionButton}
               </div>
               ${isAnswered && s.response_submission_text ? `
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">Votre réponse:</p>
+                <div style="margin-top: var(--spacing-lg); padding-top: var(--spacing-lg); border-top: 2px solid var(--border-color);">
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: var(--spacing-sm);">Votre réponse:</p>
                   <p style="font-size: 0.85rem; font-style: italic;">${s.response_submission_text}</p>
                 </div>
               ` : ''}
@@ -728,8 +793,6 @@
         container.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur: ${err.message}</p>`;
       }
     }
-
-    let currentSuggestionId = null;
 
     function respondToSuggestion(suggestionId, competency, activityType) {
       currentSuggestionId = suggestionId;
@@ -743,7 +806,6 @@
       // Show notification
       alert(`Répondez à la suggestion sur "${competency}". L'IA analysera votre soumission pour cette compétence.`);
     }
-
   </script>
 </body>
 </html>

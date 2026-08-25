@@ -4,57 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skill Badge Platform — Espace Instructeur</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- ========================================== -->
   <!-- CSS DESIGN SYSTEM & REUSABLE VARIABLES     -->
   <!-- ========================================== -->
   <style>
     :root {
-      /* Color Palette */
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-light: #eef2ff;
-      --primary-ring: rgba(79, 70, 229, 0.2);
-      
-      --secondary: #0ea5e9;
-      --secondary-light: #e0f2fe;
-      
-      --accent: #8b5cf6;
-      --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      
-      --success: #10b981;
-      --success-light: #ecfdf5;
-      --warning: #f59e0b;
-      --warning-light: #fef3c7;
-      --danger: #ef4444;
-      --danger-light: #fef2f2;
+      /* Security-Themed Color Palette */
+      --base-navy: #0A1E2C;
+      --surface-slate: #1B2E3B;
+      --content-white: #F8FAFC;
+      --verification-gold: #C4A052;
+      --success-emerald: #2E7D32;
+      --text-charcoal: #2D3748;
+      --text-muted: #64748B;
+      --border-color: #334E5E;
+      --border-focus: #C4A052;
 
-      /* Neutrals & Surfaces */
-      --bg-main: #f8fafc;
-      --bg-surface: #ffffff;
-      --bg-glass: rgba(255, 255, 255, 0.85);
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --text-subtle: #94a3b8;
-      --border-color: #e2e8f0;
-      --border-hover: #cbd5e1;
+      /* Typography */
+      --font-display: 'IBM Plex Serif', serif;
+      --font-body: 'Source Sans Pro', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
 
-      /* Elevations & Borders */
-      --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-sm: 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-      --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.15);
-
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 18px;
-      --radius-xl: 24px;
-      --radius-full: 9999px;
-
-      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      /* Spacing & Layout */
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --container-max: 1140px;
     }
 
     * {
@@ -64,10 +46,10 @@
     }
 
     body {
-      font-family: var(--font-main);
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      line-height: 1.5;
+      font-family: var(--font-body);
+      background-color: var(--content-white);
+      color: var(--text-charcoal);
+      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -77,33 +59,99 @@
     /* Container */
     .container {
       width: 100%;
-      max-width: 1140px;
+      max-width: var(--container-max);
       margin: 0 auto;
-      padding: 0 1.5rem;
+      padding: 0 var(--spacing-lg);
     }
 
     /* Typography */
     h1, h2, h3, h4 {
+      font-family: var(--font-display);
       font-weight: 700;
-      color: var(--text-main);
-      letter-spacing: -0.02em;
+      color: var(--base-navy);
+      letter-spacing: -0.01em;
     }
     p {
       color: var(--text-muted);
       font-size: 0.95rem;
     }
 
-    /* Common Card Components */
-    .card {
-      background: var(--bg-surface);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
-      padding: 1.75rem;
-      transition: var(--transition);
+    /* Command Center Layout */
+    .navbar {
+      background: var(--base-navy);
+      border-bottom: 2px solid var(--border-color);
+      padding: var(--spacing-md) 0;
     }
-    .card:hover {
-      box-shadow: var(--shadow-md);
+
+    .navbar-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar-brand {
+      color: var(--content-white);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .navbar-brand img {
+      height: 40px;
+      width: auto;
+    }
+
+    .navbar-brand span {
+      color: var(--verification-gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Clearance Scope Bar */
+    .domains-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .domain-badge {
+      background: var(--base-navy);
+      color: var(--verification-gold);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      border: 2px solid var(--border-color);
+      letter-spacing: 0.05em;
+    }
+
+    /* Student Grid Cards */
+    .student-card {
+      border: 2px solid var(--border-color);
+      padding: var(--spacing-lg);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      background: var(--content-white);
+    }
+
+    .student-card:hover {
+      border-color: var(--verification-gold);
+    }
+
+    .student-card:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
+    }
+
+    /* Split Column Layout for Student Detail */
+    .student-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-lg);
     }
 
     /* Buttons */
@@ -114,73 +162,80 @@
       font-size: 0.95rem;
       font-weight: 600;
       padding: 0.75rem 1.25rem;
-      border-radius: var(--radius-md);
-      border: 1px solid transparent;
+      border: 2px solid transparent;
       cursor: pointer;
-      transition: var(--transition);
+      transition: all 0.15s ease;
       text-decoration: none;
-      gap: 0.5rem;
-      user-select: none;
+      font-family: var(--font-body);
     }
+
     .btn-primary {
-      background: var(--accent-gradient);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      background: var(--verification-gold);
+      color: var(--base-navy);
+      border-color: var(--verification-gold);
     }
+
     .btn-primary:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+      background: #D4B362;
+      border-color: #D4B362;
     }
-    .btn-primary:active {
-      transform: translateY(0);
+
+    .btn-primary:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
     }
+
     .btn-secondary {
-      background-color: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
+      background: transparent;
+      border-color: var(--border-color);
+      color: var(--text-charcoal);
     }
+
     .btn-secondary:hover {
-      background-color: var(--bg-main);
-      border-color: var(--border-hover);
+      border-color: var(--verification-gold);
+      color: var(--verification-gold);
     }
-    .btn-block {
-      width: 100%;
+
+    .btn-secondary:focus {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
     }
+
     .btn:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
-      transform: none !important;
-      box-shadow: none !important;
     }
 
     /* Forms & Inputs */
     .form-group {
-      margin-bottom: 1.25rem;
+      margin-bottom: var(--spacing-lg);
     }
+
     .form-group label {
       display: block;
       font-size: 0.875rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text-main);
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-charcoal);
+      font-family: var(--font-body);
     }
+
     .form-control {
       width: 100%;
-      padding: 0.75rem 1rem;
+      padding: 0.875rem 1rem;
       font-size: 0.95rem;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-color);
-      background-color: var(--bg-surface);
-      color: var(--text-main);
+      border: 2px solid var(--border-color);
+      background: var(--content-white);
+      color: var(--text-charcoal);
       outline: none;
-      transition: var(--transition);
-      font-family: inherit;
+      transition: all 0.15s ease;
+      font-family: var(--font-body);
     }
+
     .form-control:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px var(--primary-ring);
+      border-color: var(--verification-gold);
     }
+
     textarea.form-control {
       min-height: 140px;
       font-family: var(--font-mono);
@@ -188,141 +243,111 @@
       resize: vertical;
     }
 
-    /* Alerts */
-    .alert {
-      padding: 0.85rem 1.15rem;
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      margin-bottom: 1.25rem;
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .alert-error {
-      background-color: var(--danger-light);
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-    .alert-success {
-      background-color: var(--success-light);
-      color: #065f46;
-      border: 1px solid #a7f3d0;
+    /* Cards & Panels */
+    .card {
+      background: var(--content-white);
+      border: 2px solid var(--border-color);
+      padding: var(--spacing-xl);
+      margin-bottom: var(--spacing-lg);
     }
 
-    /* Badge & Tags */
+    .card h3 {
+      margin-bottom: var(--spacing-md);
+      font-size: 1.25rem;
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      gap: var(--spacing-lg);
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    /* Badge Pills */
     .badge-pill {
       display: inline-flex;
       align-items: center;
       padding: 0.3rem 0.75rem;
-      border-radius: var(--radius-full);
+      border-radius: 2px;
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      font-family: var(--font-mono);
     }
+
     .badge-pill-primary {
-      background-color: var(--primary-light);
-      color: var(--primary);
+      background: var(--base-navy);
+      color: var(--content-white);
     }
+
     .badge-pill-success {
-      background-color: var(--success-light);
-      color: var(--success);
+      background: var(--success-emerald);
+      color: var(--content-white);
     }
 
-    /* Alerts */
-    .alert {
-      padding: 0.85rem 1.15rem;
-      border-radius: var(--radius-md);
-      font-size: 0.9rem;
-      margin-bottom: 1.25rem;
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .alert-error {
-      background-color: var(--danger-light);
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-    .alert-success {
-      background-color: var(--success-light);
-      color: #065f46;
-      border: 1px solid #a7f3d0;
+    /* Progress Bars for Competency Mastery */
+    .mastery-bar {
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: var(--spacing-sm);
     }
 
-    /* Navbar */
-    .navbar {
-      background-color: var(--bg-glass);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.85rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .navbar-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .navbar-brand {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
+    .mastery-fill {
+      height: 100%;
+      background: var(--verification-gold);
+      transition: width 0.3s ease;
     }
 
-    /* Layout Utility */
+    /* Suggestion Items */
+    .suggestion-item {
+      border-left: 3px solid var(--verification-gold);
+      padding-left: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    /* Utility */
     .hidden {
       display: none !important;
     }
-    .grid {
-      display: grid;
-      gap: 1.5rem;
-    }
-    .grid-2 {
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-inner {
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+
+      .student-detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 0 var(--spacing-md);
+      }
     }
 
-    /* ========================================== */
-    /* INSTRUCTOR DASHBOARD SPECIFIC STYLES        */
-    /* ========================================== */
-    .student-card {
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .student-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-    .domains-header {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .suggestion-item {
-      border-left: 3px solid var(--primary);
-      padding-left: 1rem;
-      margin-bottom: 1rem;
-    }
-    .badge-image-frame {
-      width: 80px;
-      height: 80px;
-      border-radius: var(--radius-md);
-      background-color: var(--bg-main);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .badge-image-frame img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+    /* Accessibility Focus States */
+    *:focus-visible {
+      outline: 2px solid var(--verification-gold);
+      outline-offset: 2px;
     }
   </style>
 </head>
@@ -336,19 +361,20 @@
     <header class="navbar">
       <div class="container navbar-inner">
         <a href="#" class="navbar-brand">
-          👨‍🏫 <span>Skill Badge Platform</span>
+          <img src="logo1.png" alt="Skill Badge Platform Logo" />
+          <span>Skill Badge Platform</span>
         </a>
-        <button id="btn-logout" class="btn btn-secondary" style="padding: 0.45rem 0.9rem; font-size: 0.85rem;">Déconnexion</button>
+        <button id="btn-logout" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Déconnexion</button>
       </div>
     </header>
 
-    <main class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <main class="container" style="padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xl);">
       
       <!-- VIEW A: Main Dashboard -->
       <section id="view-dashboard">
         <!-- Instructor Domains Header -->
-        <div class="card" style="margin-bottom: 2rem;">
-          <h3 style="margin-bottom: 0.5rem;">🎯 Vos Domaines d'Enseignement</h3>
+        <div class="card" style="margin-bottom: var(--spacing-xl);">
+          <h3 style="margin-bottom: var(--spacing-md);">🎯 Vos Domaines d'Enseignement</h3>
           <div id="instructor-domains-header" class="domains-header">
             <p style="font-size: 0.9rem;">Chargement de vos domaines...</p>
           </div>
@@ -356,9 +382,9 @@
 
         <!-- Students List -->
         <div class="card">
-          <h3 style="margin-bottom: 0.5rem;">👥 Étudiants Actifs dans vos Domaines</h3>
-          <p style="margin-bottom: 1.25rem;">Cliquez sur un étudiant pour voir son rapport détaillé.</p>
-          <div id="students-list-container" class="grid" style="gap: 1rem;">
+          <h3 style="margin-bottom: var(--spacing-md);">👥 Étudiants Actifs dans vos Domaines</h3>
+          <p style="margin-bottom: var(--spacing-lg);">Cliquez sur un étudiant pour voir son rapport détaillé.</p>
+          <div id="students-list-container" class="grid grid-3" style="gap: var(--spacing-lg);">
             <p>Chargement des étudiants...</p>
           </div>
         </div>
@@ -366,65 +392,67 @@
 
       <!-- VIEW B: Student Detail -->
       <section id="view-student-detail" class="hidden">
-        <button id="btn-back-to-dashboard" class="btn btn-secondary" style="margin-bottom: 1.5rem;">
+        <button id="btn-back-to-dashboard" class="btn btn-secondary" style="margin-bottom: var(--spacing-lg);">
           ← Retour à la liste des étudiants
         </button>
 
-        <div class="card" style="margin-bottom: 2rem;">
-          <h3 id="student-detail-name" style="margin-bottom: 0.25rem;">Détail de l'étudiant</h3>
-          <p id="student-detail-email" style="color: var(--text-muted);"></p>
-        </div>
+        <div class="student-detail-grid">
+          <!-- Left Column: Student Data & Assessments -->
+          <div>
+            <div class="card" style="margin-bottom: var(--spacing-lg);">
+              <h3 style="margin-bottom: var(--spacing-md);">Informations Étudiant</h3>
+              <p style="margin-bottom: var(--spacing-sm);"><strong>Nom:</strong> <span id="student-detail-name" style="color: var(--text-charcoal);"></span></p>
+              <p style="margin-bottom: var(--spacing-sm);"><strong>Email:</strong> <span id="student-detail-email" style="color: var(--text-charcoal);"></span></p>
+              <p><strong>Compétences activées:</strong> <span id="student-detail-competencies" style="color: var(--text-charcoal);"></span></p>
+            </div>
 
-        <div class="grid grid-2" style="margin-bottom: 2rem;">
-          <!-- Student Assessments -->
-          <div class="card">
-            <h4 style="margin-bottom: 1rem;">📝 Évaluations</h4>
-            <div id="student-assessments-list">
-              <p>Chargement des évaluations...</p>
+            <div class="card">
+              <h3 style="margin-bottom: var(--spacing-lg);">Évaluations de l'étudiant</h3>
+              <div id="student-assessments-list">
+                <p>Chargement des évaluations...</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 style="margin-bottom: var(--spacing-lg);">Badges obtenus</h3>
+              <div id="student-badges-list">
+                <p>Chargement des badges...</p>
+              </div>
             </div>
           </div>
 
-          <!-- Student Badges -->
-          <div class="card">
-            <h4 style="margin-bottom: 1rem;">🏆 Badges Obtenus</h4>
-            <div id="student-badges-list">
-              <p>Chargement des badges...</p>
+          <!-- Right Column: Suggestions Form & History -->
+          <div>
+            <div class="card" style="margin-bottom: var(--spacing-lg);">
+              <h3 style="margin-bottom: var(--spacing-md);">Suggérer une activité</h3>
+              <form id="form-suggest-activity">
+                <div class="form-group">
+                  <label for="suggest-competency">Compétence</label>
+                  <select id="suggest-competency" class="form-control" required>
+                    <option value="">Sélectionnez une compétence...</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="suggest-type">Type d'activité</label>
+                  <select id="suggest-type" class="form-control" required>
+                    <option value="assignment">Assignment</option>
+                    <option value="project">Project</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="suggest-message">Message personnalisé</label>
+                  <textarea id="suggest-message" class="form-control" required placeholder="Expliquez l'activité suggérée..."></textarea>
+                </div>
+                <button type="submit" id="btn-submit-suggestion" class="btn btn-primary btn-block">Envoyer la suggestion</button>
+              </form>
             </div>
-          </div>
-        </div>
 
-        <!-- Suggestions Section -->
-        <div class="card">
-          <h4 style="margin-bottom: 1rem;">💬 Suggestions d'Activités</h4>
-          
-          <!-- Past Suggestions -->
-          <div id="student-suggestions-list" style="margin-bottom: 2rem;">
-            <p>Chargement des suggestions...</p>
-          </div>
-
-          <!-- Suggest Activity Form -->
-          <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
-            <h5 style="margin-bottom: 1rem;">Suggérer une nouvelle activité</h5>
-            <form id="form-suggest-activity">
-              <div class="form-group">
-                <label for="suggest-competency">Compétence</label>
-                <select id="suggest-competency" class="form-control" required>
-                  <option value="">Sélectionnez une compétence...</option>
-                </select>
+            <div class="card">
+              <h3 style="margin-bottom: var(--spacing-lg);">Historique des suggestions</h3>
+              <div id="student-suggestions-list">
+                <p>Chargement des suggestions...</p>
               </div>
-              <div class="form-group">
-                <label for="suggest-type">Type d'activité</label>
-                <select id="suggest-type" class="form-control" required>
-                  <option value="assignment">Assignment (Devoir / TP)</option>
-                  <option value="project">Project (Projet)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="suggest-message">Message / Instructions</label>
-                <textarea id="suggest-message" class="form-control" required placeholder="Décrivez l'activité suggérée..."></textarea>
-              </div>
-              <button type="submit" id="btn-submit-suggestion" class="btn btn-primary">Envoyer la suggestion</button>
-            </form>
+            </div>
           </div>
         </div>
       </section>
@@ -433,9 +461,10 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- 3. JAVASCRIPT APPLICATION LOGIC           -->
+  <!-- JAVASCRIPT APPLICATION LOGIC               -->
   <!-- ========================================== -->
   <script>
+    /* ===== APPLICATION STATE ===== */
     const BASE_URL = "http://127.0.0.1:8000";
     let authToken = null;
     let currentStudentId = null;
@@ -486,22 +515,16 @@
           headers: { "Authorization": `Bearer ${authToken}` }
         });
 
-        if (!res.ok) {
-          throw new Error("Impossible de charger vos domaines.");
-        }
-
+        if (!res.ok) throw new Error("Impossible de charger vos domaines.");
         const domains = await res.json();
-        instructorDomains = Array.isArray(domains) ? domains : [];
 
-        if (instructorDomains.length === 0) {
-          container.innerHTML = `<p style="font-size: 0.9rem;">Aucun domaine assigné.</p>`;
+        if (!domains || domains.length === 0) {
+          container.innerHTML = `<p style="font-size: 0.9rem;">Aucun domaine configuré.</p>`;
         } else {
-          container.innerHTML = instructorDomains.map(domain => `
-            <span class="badge-pill badge-pill-primary">${domain}</span>
-          `).join("");
+          container.innerHTML = domains.map(d => `<span class="domain-badge">${d}</span>`).join("");
         }
       } catch (err) {
-        container.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">Erreur de chargement des domaines.</p>`;
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur: ${err.message}</p>`;
       }
     }
 
@@ -512,45 +535,24 @@
           headers: { "Authorization": `Bearer ${authToken}` }
         });
 
-        if (!res.ok) {
-          throw new Error("Impossible de charger les étudiants.");
-        }
-
+        if (!res.ok) throw new Error("Impossible de charger les étudiants.");
         const students = await res.json();
 
-        if (!Array.isArray(students) || students.length === 0) {
+        if (!students || students.length === 0) {
           container.innerHTML = `<p style="font-size: 0.9rem;">Aucun étudiant actif dans vos domaines.</p>`;
-          return;
-        }
-
-        container.innerHTML = students.map(student => `
-          <div class="card student-card" data-student-id="${student.student_id}">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-              <div>
-                <strong style="font-size: 1rem;">${student.fullname || student.email}</strong>
-                <p style="font-size: 0.85rem; margin-top: 0.35rem; color: var(--text-muted);">${student.email}</p>
+        } else {
+          container.innerHTML = students.map(s => `
+            <div class="student-card" onclick="showStudentDetail('${s.student_id}', '${s.fullname}', '${s.email}')">
+              <h4 style="margin-bottom: var(--spacing-sm);">${s.fullname}</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: var(--spacing-sm);">${s.email}</p>
+              <div class="domains-header">
+                ${s.competencies.map(c => `<span class="domain-badge" style="font-size: 0.7rem; padding: 0.3rem 0.6rem;">${c}</span>`).join("")}
               </div>
-              <span class="badge-pill badge-pill-success">${student.competencies.length} domaine(s)</span>
             </div>
-            <div style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.35rem;">
-              ${student.competencies.map(comp => `
-                <span class="badge-pill badge-pill-primary" style="font-size: 0.7rem;">${comp}</span>
-              `).join("")}
-            </div>
-          </div>
-        `).join("");
-
-        document.querySelectorAll(".student-card").forEach(card => {
-          card.addEventListener("click", () => {
-            const studentId = card.getAttribute("data-student-id");
-            const studentName = card.querySelector("strong").textContent;
-            const studentEmail = card.querySelector("p").textContent;
-            showStudentDetail(studentId, studentName, studentEmail);
-          });
-        });
-
+          `).join("");
+        }
       } catch (err) {
-        container.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">Erreur de chargement des étudiants.</p>`;
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur: ${err.message}</p>`;
       }
     }
 
@@ -566,6 +568,12 @@
       loadStudentSuggestions(studentId);
       populateSuggestionForm();
     }
+
+    document.getElementById("btn-back-to-dashboard").addEventListener("click", () => {
+      viewStudentDetail.classList.add("hidden");
+      viewDashboard.classList.remove("hidden");
+      currentStudentId = null;
+    });
 
     async function loadStudentReport(studentId) {
       const container = document.getElementById("student-assessments-list");
@@ -593,14 +601,14 @@
           container.innerHTML = `<p style="font-size: 0.9rem;">Aucune évaluation disponible.</p>`;
         } else {
           container.innerHTML = data.assessments.map(a => `
-            <div class="card" style="padding: 1rem; margin-bottom: 0.75rem;">
+            <div class="card" style="padding: var(--spacing-lg); margin-bottom: var(--spacing-md);">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <strong>${a.competency}</strong>
                 <span class="badge-pill badge-pill-primary">${a.mastery_level}</span>
               </div>
-              <p style="font-size: 0.8rem; margin-top: 0.35rem;">Type: ${a.submission_type}</p>
-              <p style="font-size: 0.8rem; color: var(--text-subtle);">Confiance: ${(a.confidence * 100).toFixed(0)}%</p>
-              <p style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-muted);">${a.feedback}</p>
+              <p style="font-size: 0.8rem; margin-top: var(--spacing-sm);">Type: ${a.submission_type}</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">Confiance: ${(a.confidence * 100).toFixed(0)}%</p>
+              <p style="font-size: 0.85rem; margin-top: var(--spacing-sm); color: var(--text-muted);">${a.feedback}</p>
             </div>
           `).join("");
         }
@@ -610,22 +618,23 @@
           badgesContainer.innerHTML = `<p style="font-size: 0.9rem;">Aucun badge obtenu.</p>`;
         } else {
           badgesContainer.innerHTML = data.badges.map(b => `
-            <div class="card" style="padding: 1rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
-              <div class="badge-image-frame">
-                <img src="${BASE_URL}${b.image_url}" alt="Badge" />
-              </div>
-              <div>
-                <strong>${b.competency}</strong>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">${b.achievement_level}</p>
-                <p style="font-size: 0.75rem; color: var(--text-subtle);">${b.description}</p>
+            <div class="card" style="padding: var(--spacing-lg); margin-bottom: var(--spacing-md);">
+              <div style="display: flex; align-items: center; gap: var(--spacing-lg);">
+                <div style="width: 60px; height: 60px; border: 2px solid var(--border-color); overflow: hidden; background: var(--content-white);">
+                  <img src="${BASE_URL}${b.image_url}" alt="Badge" style="width: 100%; height: 100%; object-fit: contain;" />
+                </div>
+                <div>
+                  <strong>${b.competency}</strong>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">Niveau: ${b.achievement_level}</p>
+                  <p style="font-size: 0.75rem; color: var(--text-muted);">${new Date(b.issue_date).toLocaleDateString()}</p>
+                </div>
               </div>
             </div>
           `).join("");
         }
-
       } catch (err) {
-        container.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">Erreur de chargement du rapport.</p>`;
-        badgesContainer.innerHTML = `<p style="color: var(--danger); font-size: 0.85rem;">-</p>`;
+        container.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur: ${err.message}</p>`;
+        badgesContainer.innerHTML = `<p style="color: var(--danger); font-size: 0.9rem;">Erreur de chargement.</p>`;
       }
     }
 
@@ -655,19 +664,19 @@
 
           return `
             <div class="suggestion-item">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
                 <strong>${s.competency}</strong>
-                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <div style="display: flex; gap: var(--spacing-sm); align-items: center;">
                   <span class="badge-pill badge-pill-primary">${s.activity_type}</span>
                   ${statusBadge}
                 </div>
               </div>
-              <p style="font-size: 0.9rem; margin-bottom: 0.35rem;">${s.message}</p>
-              <p style="font-size: 0.75rem; color: var(--text-subtle);">${new Date(s.created_at).toLocaleString('fr-FR')}</p>
+              <p style="font-size: 0.9rem; margin-bottom: var(--spacing-md);">${s.message}</p>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">${new Date(s.created_at).toLocaleString('fr-FR')}</p>
               ${isAnswered && s.response_submission_text ? `
-                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color);">
-                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.35rem;">Réponse de l'étudiant:</p>
-                  <p style="font-size: 0.85rem; font-style: italic; background: var(--bg-main); padding: 0.5rem; border-radius: var(--radius-sm);">${s.response_submission_text}</p>
+                <div style="margin-top: var(--spacing-lg); padding-top: var(--spacing-lg); border-top: 2px solid var(--border-color);">
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: var(--spacing-sm);">Réponse de l'étudiant:</p>
+                  <p style="font-size: 0.85rem; font-style: italic; background: var(--content-white); padding: var(--spacing-sm); border: 2px solid var(--border-color);">${s.response_submission_text}</p>
                 </div>
               ` : ''}
             </div>
@@ -726,32 +735,20 @@
           })
         });
 
-        if (res.status === 400) {
-          const errorData = await res.json().catch(() => ({}));
-          throw new Error(errorData.detail || "Erreur de validation.");
-        }
-
         if (!res.ok) {
-          throw new Error("Impossible d'envoyer la suggestion.");
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(errorData.detail || "Erreur lors de l'envoi de la suggestion.");
         }
 
-        // Reset form and refresh suggestions
-        document.getElementById("form-suggest-activity").reset();
-        loadStudentSuggestions(currentStudentId);
         alert("Suggestion envoyée avec succès !");
-
+        document.getElementById("suggest-message").value = "";
+        loadStudentSuggestions(currentStudentId);
       } catch (err) {
-        alert(err.message);
+        alert(`Erreur: ${err.message}`);
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Envoyer la suggestion";
       }
-    });
-
-    document.getElementById("btn-back-to-dashboard").addEventListener("click", () => {
-      currentStudentId = null;
-      viewStudentDetail.classList.add("hidden");
-      viewDashboard.classList.remove("hidden");
     });
   </script>
 </body>
